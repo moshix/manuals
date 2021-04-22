@@ -1,0 +1,720 @@
+
+          +--------------------------------------------------+
+          |                                                  |
+          | START OF VAX/VMS UPGRADE FROM VMS 4.6 TO VMS 4.7 |
+          |                                                  |
+          +--------------------------------------------------+
+
+
+Username: SYSTEM
+Password: 
+        Welcome to VAX/VMS version V4.6
+    Last interactive login on Wednesday, 20-FEB-2019 08:59
+$ SET TERMINAL/INQUIRE/INSERT/LINE/EDIT/WIDTH=132
+$ @sys$update:vmsinstal vms047 DUA3:
+
+
+	VAX/VMS Software Product Installation Procedure V4.6    
+
+
+It is 20-FEB-2019 at 09:17.
+Enter a question mark (?) at any time for help.
+
+* Are you satisfied with the backup of your system disk [YES]? 
+
+Please mount the first volume of the set on DUA3:.
+* Are you ready? YES
+%MOUNT-I-MOUNTED, VAXVMS047A   mounted on _TSTVAX$DUA3:
+
+The following products will be processed:
+
+  VMS V4.7
+
+
+	Beginning installation of VMS V4.7 at 09:17
+
+%VMSINSTAL-I-RESTORE, Restoring product saveset A...
+
+
+	This kit contains Version 4.7 of VAX/VMS.  It must be installed 
+	upon Version 4.6 of VAX/VMS.  
+
+	NOTE:   Among the new images shipped in this kit are
+		PEDRIVER.MSKEXE and DSDRIVER.MSKEXE.  If your
+		system is running LAVc or volume shadowing 
+		software, you MUST reapply the LAVC or volume 
+		shadowing key(s) AFTER applying the Version 4.7 
+		update.  If you do not reapply the appropriate keys,
+		your system will not be running the updated
+		images.
+
+
+
+The first phase of the upgrade will attempt to verify that all Digital
+supplied accounts are secured against obvious penetration attempts.
+
+%UPGRADE-I-PWD_OKAY, account password for SYSTEM verified
+%UPGRADE-I-PWD_OKAY, account password for FIELD verified
+%UPGRADE-I-PWD_OKAY, account password for SYSTEST verified
+
+%UPGRADE-W-PWD_INVALID, account password for SYSTEST_CLIG is invalid
+-UPGRADE-I-PWD_WEAK, password is too easy to guess
+
+Because of the preceding error, you must take action to secure this account.
+You must either disable this account, change its password, or do both.
+
+* Do you want to disable the account [YES]? NO
+* Do you want to change the account password [YES]? 
+
+
+You must now select a new primary password for the SYSTEST_CLIG account.  The
+password you select must be at least 8 characters in length and may not
+be the same as the name of the account.
+
+New password: 
+Verification: 
+
+%UAF-I-MDFYMSG, user record(s) updated
+%UPGRADE-I-PWD_SET, primary password for account SYSTEST_CLIG set
+
+%UPGRADE-I-NONEXIST, account USER does not exist
+%UPGRADE-I-NONEXIST, account USERP does not exist
+
+
+	1)  Apply all fixes to the system
+	2)  Create a file with the descriptions of all fixes
+	3)  Both of the above
+
+* What would you like to do [3]: 3
+%VMS-I-FIXDESC, The fixes are described in SYS$UPDATE:VMS047.TXT
+* Do you want to purge files replaced by this installation [YES]? 
+%BACKUP-I-STARTVERIFY, starting verification pass
+
+  1) ADARTL (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ADARTL.EXE;1
+
+  2) AGEN (miscellaneous fix)
+
+  3) AUTOGEN (edit text file)
+
+  4) BACKUP (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]BACKUP.EXE;1
+
+  5) CLUSTRLOA (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]CLUSTRLOA.EXE;3
+
+  6) COBRTL (miscellaneous fix)
+
+  7) COBRTL (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]COBRTL.EXE;2
+
+  8) CSP (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]CSP.EXE;3
+
+  9) CTDRIVER (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-ECOSET, eco level 1 already set in VMI$ROOT:[SYSEXE]CTDRIVER.EXE;2
+%VMSINSTAL-W-NOFILE, New file CTDRIVER.EXE does not exist.
+
+ 10) DEBUG (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]DEBUG.EXE;1
+
+ 11) DSDRIVER (miscellaneous fix)
+
+ 12) ERFCTLSHR (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ERFCTLSHR.EXE;1
+
+ 13) ERFLIB (miscellaneous fix)
+%VMS-I-ERFLIB.TLB TA79 update completed successfully, 
+
+ 14) ERFPROC1 (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ERFPROC1.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ERFPROC1.EXE;1
+
+ 15) ESDRIVER (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ESDRIVER.EXE;1
+
+ 16) ETDRIVER (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ETDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ETDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ETDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ETDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]ETDRIVER.EXE;1
+
+ 17) F11BXQP (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]F11BXQP.EXE;3
+
+ 18) HSCPAD (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]HSCPAD.EXE;1
+
+ 19) JOBCTL (new image)
+
+ 20) LATCP (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]LATCP.EXE;2
+
+ 21) LATSYM (new image)
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]LATSYM.EXE;3
+
+ 22) LTDRIVER (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]LTDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]LTDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]LTDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]LTDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]LTDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]LTDRIVER.EXE;1
+
+ 23) MOM (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]MOM.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]MOM.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]MOM.EXE;1
+
+ 24) MONITOR (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]MONITOR.EXE;1
+
+ 25) MTAAACP (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]MTAAACP.EXE;1
+
+ 26) NETACP (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETACP.EXE;1
+
+ 27) NETDRIVER (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NETDRIVER.EXE;1
+
+ 28) NODRIVER (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NODRIVER.EXE;3
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]NODRIVER.EXE;3
+
+ 29) PEDRIVER (miscellaneous fix)
+
+ 30) RMS (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-ECOSET, eco level 1 already set in VMI$ROOT:[SYSEXE]RMS.EXE;2
+%PATCH-I-ECOSET, eco level 2 already set in VMI$ROOT:[SYSEXE]RMS.EXE;2
+%PATCH-I-ECOSET, eco level 3 already set in VMI$ROOT:[SYSEXE]RMS.EXE;2
+%PATCH-I-ECOSET, eco level 4 already set in VMI$ROOT:[SYSEXE]RMS.EXE;2
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]RMS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]RMS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]RMS.EXE;1
+
+ 31) SATELLITE_CONFIG (edit text file)
+
+ 32) SECURESHR (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SECURESHR.EXE;1
+
+ 33) SET (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SET.EXE;1
+
+ 34) SMBSRVSHR (new image)
+
+ 35) STABACKUP (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]STABACKUP.EXE;1
+
+ 36) SYS (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-ECOSET, eco level 80 already set in VMI$ROOT:[SYSEXE]SYS.EXE;2
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+%PATCH-I-ECONOTSET, eco level 88 not set in VMI$ROOT:[SYSEXE]SYS.EXE;2
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYS.EXE;1
+
+ 37) SYSINIT (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYSINIT.EXE;3
+
+ 38) SYSLOA790 (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYSLOA790.EXE;3
+
+ 39) SYSLOA8NN (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-ECOSET, eco level 1 already set in VMI$ROOT:[SYSEXE]SYSLOA8NN.EXE;2
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]SYSLOA8NN.EXE;1
+
+ 40) TPUSHR003 (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]TPUSHR.EXE;1
+
+ 41) TTDRIVER (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]TTDRIVER.EXE;3
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]TTDRIVER.EXE;3
+
+ 42) TUDRIVER (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-ECOSET, eco level 1 already set in VMI$ROOT:[SYSEXE]TUDRIVER.EXE;2
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]TUDRIVER.EXE;1
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]TUDRIVER.EXE;1
+
+ 43) TVDRIVER (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]TVDRIVER.EXE;2
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]TVDRIVER.EXE;2
+
+ 44) UETDISK00 (new image)
+
+ 45) UETINIT00 (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-ECOSET, eco level 1 already set in VMI$ROOT:[SYSTEST]UETINIT00.EXE;2
+%VMSINSTAL-W-NOFILE, New file UETINIT00.EXE does not exist.
+
+ 46) UETINIT01 (new image)
+
+ 47) UISSHR (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]UISSHR.EXE;4
+
+ 48) VAXCRTL (miscellaneous fix)
+
+ 49) VAXCRTL (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-ECOSET, eco level 1 already set in VMI$ROOT:[SYSLIB]VAXCRTL.EXE;2
+%VMSINSTAL-W-NOFILE, New file VAXCRTL.EXE does not exist.
+
+ 50) VAXCRTLG (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-ECOSET, eco level 1 already set in VMI$ROOT:[SYSLIB]VAXCRTLG.EXE;2
+%VMSINSTAL-W-NOFILE, New file VAXCRTLG.EXE does not exist.
+
+ 51) VMB (new image)
+%VMS-I-VMB, ******************  IMPORTANT  ********************
+%VMS-I-VMB, A new VMB.EXE was just copied to your system disk.
+%VMS-I-VMB, If your VAX processor bootstraps from an HSC disk over the 
+%VMS-I-VMB, CI, you must update your console device after completing 
+%VMS-I-VMB, this update procedure.  See Section 1.7 of the Version 4.7
+%VMS-I-VMB, VMS Release Notes for instructions.
+%VMS-I-VMB, ***************************************************
+
+ 52) VPM (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]VPM.EXE;1
+
+ 53) XGDRIVER (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]XGDRIVER.EXE;3
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]XGDRIVER.EXE;3
+
+ 54) XQDRIVER (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-ECOSET, eco level 1 already set in VMI$ROOT:[SYSEXE]XQDRIVER.EXE;2
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]XQDRIVER.EXE;1
+
+ 55) YFDRIVER (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.VMS047]YFDRIVER.EXE;3
+
+%VMS-E-ERRORS, Of the 55 fixes listed above, the following 4 should be reviewed:
+    9,  45,  49,  50
+%VMSINSTAL-I-MOVEFILES, Files will now be moved to their target directories...
+
+	Installation of VMS V4.7 completed at 09:19
+
+%VMSINSTAL-I-REBOOT, This product requires that the system be rebooted.
+
+
+	SHUTDOWN -- Perform an Orderly System Shutdown
+
+
+%SHUTDOWN-I-BOOTCHECK, Performing reboot consistency check...
+%SHUTDOWN-I-CHECKOK, Basic reboot consistency check completed
+
+%SHUTDOWN-I-OPERATOR, This terminal is now an operator's console.
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:19:58.87  %%%%%%%%%%%
+Operator status for operator _TSTVAX$OPA0:
+CENTRAL, PRINTER, TAPES, DISKS, DEVICES, CARDS, NETWORK, CLUSTER, SECURITY,
+OPER1, OPER2, OPER3, OPER4, OPER5, OPER6, OPER7, OPER8, OPER9, OPER10, OPER11,
+OPER12
+
+%SHUTDOWN-I-DISLOGINS, Interactive logins will now be disabled.
+%SET-I-INTSET, login interactive limit = 0, current interactive value = 1
+%SHUTDOWN-I-STOPQUEMAN, The queue manager will now be stopped.
+%JBC-E-JOBQUEDIS, system job queue manager is not running
+
+SHUTDOWN message on TSTVAX from user SYSTEM at _TSTVAX$OPA0:   09:19:58
+TSTVAX will shut down in 0 minutes; back up soon.  Please log off node TSTVAX.
+Reboot after VMS V4.7 installation.
+
+1 terminal has been notified on TSTVAX.
+
+%SHUTDOWN-I-SITESHUT, The site-specific shutdown procedure will now be invoked.
+%SHUTDOWN-I-STOPUSER, All user processes will now be stopped.
+%SHUTDOWN-I-REMOVE, All installed images will now be removed.
+%SHUTDOWN-I-DISMOUNT, All volumes will now be dismounted.
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:19:59.06  %%%%%%%%%%%
+Message from user SYSTEM on TSTVAX
+_TSTVAX$OPA0:, TSTVAX shutdown was requested by the operator.
+
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:19:59.07  %%%%%%%%%%%
+Logfile was closed by operator _TSTVAX$OPA0:
+Logfile was SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;6
+
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:19:59.08  %%%%%%%%%%%
+Operator _TSTVAX$OPA0: has been disabled, username SYSTEM
+
+	SYSTEM SHUTDOWN COMPLETE - USE CONSOLE TO HALT SYSTEM
+Infinite loop, PC: 80008D7E (BRB 80008D7E)
+sim> boot rq0
+Loading boot code from internal vmb.exe
+
+
+   VAX/VMS Version V4.7 28-Oct-1987 13:00
+
+
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:20:50.29  %%%%%%%%%%%
+Logfile has been initialized by operator _TSTVAX$OPA0:
+Logfile is SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;7
+
+%SET-I-INTSET, login interactive limit = 64, current interactive value = 0
+  SYSTEM       job terminated at 20-FEB-2019 09:20:50.35
+
+          +-------------------------------------------+
+          |                                           |
+          | START OF VAX/VMS 4.7 SECURITY UPDATE 1    |
+          |                                           |
+          +-------------------------------------------+
+
+
+
+Username: SYSTEM
+Password: 
+        Welcome to VAX/VMS version V4.7
+    Last interactive login on Wednesday, 20-FEB-2019 09:15
+$ SET TERMINAL/INQUIRE/INSERT/LINE/EDIT/WIDTH=132
+$ @sys$update:vmsinstal SECURITY_UPD020 DUA3:
+
+
+	VAX/VMS Software Product Installation Procedure V4.7    
+
+
+It is 20-FEB-2019 at 09:29.
+Enter a question mark (?) at any time for help.
+
+* Are you satisfied with the backup of your system disk [YES]? 
+
+Please mount the first volume of the set on DUA3:.
+* Are you ready? YES
+%MOUNT-I-MOUNTED, VAXVMS047A   mounted on _TSTVAX$DUA3:
+
+The following products will be processed:
+
+  SECURITY_UPD V2.0
+
+
+	Beginning installation of SECURITY_UPD V2.0 at 09:29
+
+%VMSINSTAL-I-RESTORE, Restoring product saveset A...
+
+
+     *****  THIS KIT CONTAINS AN IMPORTANT PATCH *****
+
+     If your system is running any of the following VAX/VMS
+     or MicroVMS versions, it is imperative that this kit
+     be installed immediately.
+
+     VAX/VMS Versions 4.3, 4.4, 4.5, 4.5A, 4.5C, 4.6, 4.7, 4.7A
+		      (4.6A - obsolete)
+
+     MicroVMS Versions 4.3, 4.4, 4.5, 4.5B, 4.6, 4.7
+
+
+
+	1)  Apply all fixes to the system
+	2)  Create a file with the descriptions of all fixes
+	3)  Both of the above
+
+* What would you like to do [3]: 
+%SECURITY_UPD-I-FIXDESC, The fixes are described in SYS$UPDATE:SECURITY_UPD020.TXT
+* Do you want to purge files replaced by this installation [YES]? 
+%BACKUP-I-STARTVERIFY, starting verification pass
+%BACKUP-W-NOFILES, no files selected from DUA3:[000000]SECURITY_UPD020.B;
+
+  1) $VWS (miscellaneous fix)
+
+  2) DBGSSISHR (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.SECURITY_UPD020]DBGSSISHR.EXE;3
+
+  3) SYS (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.SECURITY_UPD020]SYS.EXE;1
+
+  4) TTDRIVER (miscellaneous fix)
+
+  5) TTDRIVER (new image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.SECURITY_UPD020]TTDRIVER.EXE;2
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.SECURITY_UPD020]TTDRIVER.EXE;2
+
+%VMSINSTAL-I-MOVEFILES, Files will now be moved to their target directories...
+
+	Installation of SECURITY_UPD V2.0 completed at 09:29
+
+%VMSINSTAL-I-REBOOT, This product requires that the system be rebooted.
+
+
+	SHUTDOWN -- Perform an Orderly System Shutdown
+
+
+%SHUTDOWN-I-BOOTCHECK, Performing reboot consistency check...
+%SHUTDOWN-I-CHECKOK, Basic reboot consistency check completed
+
+%SHUTDOWN-I-OPERATOR, This terminal is now an operator's console.
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:29:52.98  %%%%%%%%%%%
+Operator status for operator _TSTVAX$OPA0:
+CENTRAL, PRINTER, TAPES, DISKS, DEVICES, CARDS, NETWORK, CLUSTER, SECURITY,
+OPER1, OPER2, OPER3, OPER4, OPER5, OPER6, OPER7, OPER8, OPER9, OPER10, OPER11,
+OPER12
+
+%SHUTDOWN-I-DISLOGINS, Interactive logins will now be disabled.
+%SET-I-INTSET, login interactive limit = 0, current interactive value = 1
+%SHUTDOWN-I-STOPQUEMAN, The queue manager will now be stopped.
+%JBC-E-JOBQUEDIS, system job queue manager is not running
+
+SHUTDOWN message on TSTVAX from user SYSTEM at _TSTVAX$OPA0:   09:29:52
+TSTVAX will shut down in 0 minutes; back up soon.  Please log off node TSTVAX.
+Reboot after SECURITY_UPD V2.0 installation.
+
+1 terminal has been notified on TSTVAX.
+
+%SHUTDOWN-I-SITESHUT, The site-specific shutdown procedure will now be invoked.
+%SHUTDOWN-I-STOPUSER, All user processes will now be stopped.
+%SHUTDOWN-I-REMOVE, All installed images will now be removed.
+%SHUTDOWN-I-DISMOUNT, All volumes will now be dismounted.
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:29:53.03  %%%%%%%%%%%
+Message from user SYSTEM on TSTVAX
+_TSTVAX$OPA0:, TSTVAX shutdown was requested by the operator.
+
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:29:53.03  %%%%%%%%%%%
+Logfile was closed by operator _TSTVAX$OPA0:
+Logfile was SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;7
+
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:29:53.03  %%%%%%%%%%%
+Operator _TSTVAX$OPA0: has been disabled, username SYSTEM
+
+	SYSTEM SHUTDOWN COMPLETE - USE CONSOLE TO HALT SYSTEM
+Infinite loop, PC: 80008D7E (BRB 80008D7E)
+sim> boot rq0
+Loading boot code from internal vmb.exe
+
+
+   VAX/VMS Version V4.7 28-Oct-1987 13:00
+
+
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:30:40.52  %%%%%%%%%%%
+Logfile has been initialized by operator _TSTVAX$OPA0:
+Logfile is SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;8
+
+%SET-I-INTSET, login interactive limit = 64, current interactive value = 0
+  SYSTEM       job terminated at 20-FEB-2019 09:30:40.58
+
+
+
+          +-------------------------------------------+
+          |                                           |
+          | START OF VAX/VMS 4.7 SECURITY UPDATE 2    |
+          |                                           |
+          +-------------------------------------------+
+
+
+Username: SYSTEM
+Password: 
+        Welcome to VAX/VMS version V4.7
+    Last interactive login on Wednesday, 20-FEB-2019 09:21
+$ SET TERMINAL/INQUIRE/INSERT/LINE/EDIT/WIDTH=132
+$ @sys$update:vmsinstal V47SECUPD030 dua3:
+
+
+	VAX/VMS Software Product Installation Procedure V4.7    
+
+
+It is 20-FEB-2019 at 09:33.
+Enter a question mark (?) at any time for help.
+
+* Are you satisfied with the backup of your system disk [YES]? 
+
+Please mount the first volume of the set on DUA3:.
+* Are you ready? yes
+%MOUNT-I-MOUNTED, VAXVMS047A   mounted on _TSTVAX$DUA3:
+
+The following products will be processed:
+
+  V47SECUPD V3.0
+
+
+	Beginning installation of V47SECUPD V3.0 at 09:33
+
+%VMSINSTAL-I-RESTORE, Restoring product saveset A...
+
+Mandatory security update kit
+
+
+	1)  Apply all fixes to the system
+	2)  Create a file with the descriptions of all fixes
+	3)  Both of the above
+
+* What would you like to do [3]: 
+%V47SECUPD-I-FIXDESC, The fixes are described in SYS$UPDATE:V47SECUPD030.TXT
+* Do you want to purge files replaced by this installation [YES]? 
+
+ 1) INSTALL (new image)
+
+ 2) MOUNTSHR (new image)
+
+ 3) SECURESHR (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.V47SECUPD030]SECURESHR.EXE;1
+
+ 4) SYS (patch image)
+%PATCH-I-NOLCL, image does not contain local symbols
+%PATCH-I-NOGBL, some or all global symbols not accessible
+%PATCH-I-WRTFIL, updating image file VMI$ROOT:[SYSUPD.V47SECUPD030]SYS.EXE;1
+
+%VMSINSTAL-I-MOVEFILES, Files will now be moved to their target directories...
+
+	Installation of V47SECUPD V3.0 completed at 09:33
+
+%VMSINSTAL-I-REBOOT, This product requires that the system be rebooted.
+
+
+	SHUTDOWN -- Perform an Orderly System Shutdown
+
+
+%SHUTDOWN-I-BOOTCHECK, Performing reboot consistency check...
+%SHUTDOWN-I-CHECKOK, Basic reboot consistency check completed
+
+%SHUTDOWN-I-OPERATOR, This terminal is now an operator's console.
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:33:44.07  %%%%%%%%%%%
+Operator status for operator _TSTVAX$OPA0:
+CENTRAL, PRINTER, TAPES, DISKS, DEVICES, CARDS, NETWORK, CLUSTER, SECURITY,
+OPER1, OPER2, OPER3, OPER4, OPER5, OPER6, OPER7, OPER8, OPER9, OPER10, OPER11,
+OPER12
+
+%SHUTDOWN-I-DISLOGINS, Interactive logins will now be disabled.
+%SET-I-INTSET, login interactive limit = 0, current interactive value = 1
+%SHUTDOWN-I-STOPQUEMAN, The queue manager will now be stopped.
+%JBC-E-JOBQUEDIS, system job queue manager is not running
+
+SHUTDOWN message on TSTVAX from user SYSTEM at _TSTVAX$OPA0:   09:33:44
+TSTVAX will shut down in 0 minutes; back up soon.  Please log off node TSTVAX.
+Reboot after V47SECUPD V3.0 installation.
+
+1 terminal has been notified on TSTVAX.
+
+%SHUTDOWN-I-SITESHUT, The site-specific shutdown procedure will now be invoked.
+%SHUTDOWN-I-STOPUSER, All user processes will now be stopped.
+%SHUTDOWN-I-REMOVE, All installed images will now be removed.
+%SHUTDOWN-I-DISMOUNT, All volumes will now be dismounted.
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:33:44.12  %%%%%%%%%%%
+Message from user SYSTEM on TSTVAX
+_TSTVAX$OPA0:, TSTVAX shutdown was requested by the operator.
+
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:33:44.12  %%%%%%%%%%%
+Logfile was closed by operator _TSTVAX$OPA0:
+Logfile was SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;8
+
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:33:44.12  %%%%%%%%%%%
+Operator _TSTVAX$OPA0: has been disabled, username SYSTEM
+
+	SYSTEM SHUTDOWN COMPLETE - USE CONSOLE TO HALT SYSTEM
+
+
+
+   VAX/VMS Version V4.7 28-Oct-1987 13:00
+
+
+%%%%%%%%%%%  OPCOM  20-FEB-2019 09:34:52.12  %%%%%%%%%%%
+Logfile has been initialized by operator _TSTVAX$OPA0:
+Logfile is SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;11
+
+%SET-I-INTSET, login interactive limit = 64, current interactive value = 0
+  SYSTEM       job terminated at 20-FEB-2019 05:35:21.08
+
+Username: SYSTEM
+Password: 
+        Welcome to VAX/VMS version V4.7
+    Last interactive login on Wednesday, 20-FEB-2019 10:09
+$ sh sys
+VAX/VMS V4.7  on node  20-FEB-2019 05:35:23.45   Uptime    0 00:01:58
+  Pid    Process Name    State  Pri      I/O       CPU       Page flts Ph.Mem
+00000200 NULL            COM      0        0   0 00:01:56.85         0      0   
+00000201 SWAPPER         HIB     16        0   0 00:00:00.00         0      0   
+00000204 ERRFMT          HIB      8       27   0 00:00:00.00        73    171   
+00000205 OPCOM           LEF      9       16   0 00:00:00.00       155    258   
+00000206 JOB_CONTROL     HIB      8       15   0 00:00:00.01        86    286   
+00000207 SYSTEM          CUR      4       47   0 00:00:00.01       270    618   
+$ logout
+  SYSTEM       logged out at 20-FEB-2019 05:36:47.17
+
+
+          +-------------------------------------------+
+          |                                           |
+          | END OF VAX/VMS 4.7 INSTALLATION PROCESS   |
+          |                                           |
+          +-------------------------------------------+
+
+
+

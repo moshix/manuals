@@ -1,0 +1,2201 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.2//EN">
+<HTML><HEAD>
+<TITLE>DB2 Server for VM:  System Administration - Starting the Application Server</TITLE>
+<!-- Begin Header Records  ========================================== -->
+<!-- D:\IDWB\IDWBWIN\Temp\idwt1068\arip2mst.scr converted by idb2h    -->
+<!-- R4.4 (367) ID Workbench Version (WINNT-WIN95) on 14 Jun 2000 at  -->
+<!-- 14:16:08                                                         -->
+<!-- (C) Copyright IBM Corporation, 1999                              -->
+<!-- All rights reserved. Licensed Materials Property of IBM          -->
+<!-- US Government Users Restricted Rights --                         -->
+<!-- Use, duplication or disclosure restricted by                     -->
+<!-- GSA ADP Schedule Contract with IBM Corp.                         -->
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<META HTTP-EQUIV="updated" CONTENT="Wed, 14 Jun 2000 14:15:50">
+<META HTTP-EQUIV="review" CONTENT="Thu, 14 Jun 2001 14:15:50">
+<META HTTP-EQUIV="expires" CONTENT="Fri, 14 Jun 2002 14:15:50">
+</HEAD><BODY>
+<!-- End Header Records  ============================================ -->
+<A NAME="Top_Of_Page"></A>
+<H1>DB2 Server for VM:  System Administration</H1>
+<HR><H2><A NAME="HDRSTRTSQL" HREF="arip2mst02.HTM#ToC_135">Starting the Application Server</A></H2>
+<A NAME="IDX4267"></A>
+<A NAME="IDX4268"></A>
+<P>This section discusses the following topics: 
+<UL COMPACT>
+<LI>The database operator
+</LI><LI>Multiple user mode initialization parameters
+</LI><LI>Single user mode initialization parameters
+</LI><LI>Tape support
+</LI><LI>General file support
+</LI><LI>Starting the application server in multiple user mode
+</LI><LI>Running multiple user mode applications
+</LI><LI>Starting the application server in single user mode
+</LI><LI>Overriding initialization parameters
+</LI><LI>Creating a parameter file
+</LI></UL>
+<P><H3><A NAME="Header_136" HREF="arip2mst02.HTM#ToC_136">The Database Operator</A></H3>
+<A NAME="IDX4269"></A>
+<A NAME="IDX4270"></A>
+<A NAME="IDX4271"></A>
+<A NAME="IDX4272"></A>
+<A NAME="IDX4273"></A>
+<A NAME="IDX4274"></A>
+<P>Each database machine has its own operator console called the DB2 Server
+for VM operator console. The user who operates this console is referred
+to as the database operator.
+<P>When more than one database machine is active, there is more than one
+database operator console. With VM facilities, a single person can
+operate many database machines. 
+<A NAME="IDX4275"></A>
+<P>
+<A NAME="IDX4276"></A>
+ For example, one person can operate many database machines by running the
+virtual machines disconnected. This common operator can reconnect to
+the various machines as needed.
+<P>
+<A NAME="IDX4277"></A>
+<P>
+<A NAME="IDX4278"></A>
+ Another way to have one operator is to use the VM Single Console Image
+Facility or the Programmable Operator Facility. These facilities allow
+the VM system operator to operate all the database machines. To learn
+more about the single console image facility and the programmable operator
+facility, refer to the <CITE>VM/ESA: CP Programming Services</CITE> or the <CITE>VM/ESA: Planning and Administration</CITE> manuals.
+<P>The database manager can operate in one of two modes: multiple user
+mode, or single user mode. 
+<A NAME="IDX4279"></A>
+<P>
+<A NAME="IDX4280"></A>
+<P>In <I>multiple user mode</I>, one or more users or applications
+concurrently access the same database. The database manager runs in a
+virtual machine while one or more applications run in other virtual
+machines. Users specify the database they want to access by running the
+SQLINIT EXEC. This EXEC establishes a default database for each
+user. For example, a user who first wants to access a database called
+TEST, then use ISQL, would enter: 
+<PRE>   SQLINIT DB(TEST)
+   ISQL
+</PRE>
+<P>The initialization parameter SYSMODE=M defines this mode. 
+<A NAME="IDX4281"></A>
+<P>
+<A NAME="IDX4282"></A>
+<P>In <I>single user mode</I>, the database manager and only one
+application program run in the same virtual machine. The application
+server is started, the program name is passed as a parameter to the database
+manager, the application is run, and the application server terminates.
+The initialization parameter SYSMODE=S defines this mode.
+<P><H3><A NAME="HDROVERR" HREF="arip2mst02.HTM#ToC_137">Multiple User Mode Initialization Parameters</A></H3>
+<A NAME="IDX4283"></A>
+<A NAME="IDX4284"></A>
+<P><A HREF="#FIGINITT1">Figure 8</A> identifies the initialization parameters that apply when the
+database manager is operating in multiple user mode, and lists their
+defaults. A discussion of the appropriate settings for these parameters
+follows.
+<P><B><A NAME="FIGINITT1">Figure 8. Multiple User Mode Initialization Parameters</A></B><BR>
+<B><BR><IMG SRC="ARIP2IN2.GIF" ALT="REQTEXT"><BR></B><BR>
+<P>
+<P><H4><A NAME="Header_138">Environment Parameters</A></H4>
+<P><H4><A NAME="Header_139">DBNAME</A></H4>
+<A NAME="IDX4285"></A>
+<A NAME="IDX4286"></A>
+<A NAME="IDX4287"></A>
+<P>A database machine can own more than one database. When starting the
+application server, specify the name of the database that is to be accessed by
+the database machine. Note that DBNAME is not specified in the
+parameter list of the SQLSTART command as an initialization parameter. <A HREF="#FIGXPPDS">Figure 9</A> shows the DBNAME parameter specified correctly.
+<P><H4><A NAME="Header_140">DCSSID</A></H4>
+<A NAME="IDX4288"></A>
+<A NAME="IDX4289"></A>
+<A NAME="IDX4290"></A>
+<P>This parameter specifies the name of the bootstrap package to be
+used. It is not needed if saved segments are not being used. For
+more information on saved segments and specifying the DCSSID parameter, see <A HREF="arip2mst68.HTM#HDRSTDCSS">Chapter 8,  Saved Segments</A>.&nbsp;&nbsp; <A HREF="#FIGXPPDS">Figure 9</A> shows the DCSSID parameter specified
+correctly. For more information on the use of this parameter, see <A HREF="#HDRSTRTMUL">Starting the Application Server in Multiple User Mode</A>.
+<P><H4><A NAME="HDRAMOD">AMODE</A></H4>
+<A NAME="IDX4291"></A>
+<A NAME="IDX4292"></A>
+<A NAME="IDX4293"></A>
+<P>This parameter specifies the type of addressing the database manager runs
+in: 31-bit addressing or 24-bit addressing. Note that AMODE is
+not specified in the parameter list of the SQLSTART EXEC as an initialization
+parameter. <A HREF="#FIGXPPDS">Figure 9</A> shows the AMODE parameter specified correctly. For
+more information on the use of this parameter, see <A HREF="#HDRSTRTMUL">Starting the Application Server in Multiple User Mode</A>. 
+<A NAME="IDX4294"></A>
+<P><H4><A NAME="Header_142">SYSMODE</A></H4>
+<A NAME="IDX4295"></A>
+<A NAME="IDX4296"></A>
+<P>This parameter is used to specify either single(S) or multiple(M) user
+mode. Set it to M to initialize the database manager for multiple user
+mode operation. This is the default mode. You will NOT normally specify this parameter as SQL EXECs set this
+parameter for you automatically.
+<P><H4><A NAME="Header_143">STARTUP</A></H4>
+<P>This parameter specifies how the database will be started: 
+<UL>
+<LI>Most of the time let STARTUP default to W (warm start). 
+<A NAME="IDX4297"></A>
+<P>
+<A NAME="IDX4298"></A>
+</LI><LI>Use STARTUP=R (restore) to restart the application server and restore the
+database from an archive tape file.
+</LI><LI>Specify STARTUP=U (user restore) if you have archived and restored the
+database with user facilities.
+</LI></UL>
+<P>For more information, see <A HREF="arip2mst74.HTM#HDRRESTDB">Restoring the Database</A>.
+<P><H4><A NAME="Header_144">PARMID</A></H4>
+<P>
+<A NAME="IDX4299"></A>
+<P>
+<A NAME="IDX4300"></A>
+ This parameter can be used to specify a CMS file containing the values for
+the other initialization parameters. Application program parameters
+(user parameters) cannot be included. Specify only the file name for
+PARMID.  The database manager assumes that the file type is SQLPARM and
+the file mode is *.  The * tells CMS to search all
+accessed minidisks (A to Z). <A HREF="#FIGXPPDS">Figure 9</A> shows an example startup that uses the PARMID
+parameter.
+<P><B><A NAME="FIGXPPDS">Figure 9. Starting in Multiple User Mode with a CMS File</A></B><BR>
+<TABLE BORDER  WIDTH="100%"><TR><TD><BR>
+<PRE>SQLSTART DBNAME(SQLDBA) DCSSID(MYBOOT) AMODE(31) PARM(PARMID=WARM1,LOGMODE=A)
+</PRE>
+</TD></TR></TABLE>
+<A NAME="IDX4301"></A>
+<A NAME="IDX4302"></A>
+<A NAME="IDX4303"></A>
+<A NAME="IDX4304"></A>
+<P>
+<P><H4><A NAME="Header_145">DBMODE</A></H4>
+<P>This parameter identifies the database name as a LOCAL resource
+(DBMODE=L), 
+<A NAME="IDX4305"></A>
+<P>
+<A NAME="IDX4306"></A>
+<P>
+<A NAME="IDX4307"></A>
+<A NAME="IDX4308"></A>
+<P>
+<A NAME="IDX4309"></A>
+<P>
+<A NAME="IDX4310"></A>
+ a GLOBAL resource (DBMODE=G), or non-APPC/VM (DBMODE=N) for a particular
+session. If the DBMODE parameter is not specified, the resource
+authorization specified in the VM directory of the database machine is
+used. Consider the following when specifying the DBMODE
+parameter: 
+<UL>
+<LI>If you specify DBMODE=L or G to run SQLSTART and the database machine
+directory does not contain the control statement IUCV with parameters GLOBAL
+or LOCAL, the SQLSTART EXEC fails.
+</LI><LI>When DBMODE=G is specified, and the IUCV *IDENT directory entry does not
+allow that resource name to be identified as a GLOBAL resource, the
+application server ends the startup.
+</LI><LI>If DBMODE=L is specified, the application server is identified as a LOCAL
+resource even if the IUCV directory entry specifies that the resource is
+GLOBAL. Specify this parameter to restrict access to the application
+server to users on the local processor.
+</LI><LI>If DBMODE=N is specified, no *IDENT directory entries are required,
+because the database machine uses IUCV instead of APPC/VM. You should
+use DBMODE=N if you have just migrated to a VM/ESA operating system, and you
+do not want to make directory changes yet. For more information about
+DBMODE=N, see <A HREF="arip2mst42.HTM#HDRDELAY">Delaying the Directory and Database Name Changes</A>.
+</LI></UL>
+<P>For more information about directory entries, see <A HREF="arip2mst58.HTM#HDRXDIRECT">VM Directory Control Statements</A>.
+<P><H4><A NAME="HDRPROTOC">PROTOCOL</A></H4>
+<A NAME="IDX4311"></A>
+<A NAME="IDX4312"></A>
+<A NAME="IDX4313"></A>
+<A NAME="IDX4314"></A>
+<A NAME="IDX4315"></A>
+<P>This parameter specifies the types of protocols that the application server
+can handle. It has two options on the SQLSTART EXEC: SQLDS and
+AUTO.
+<P>When PROTOCOL=SQLDS is specified, the DB2 Server for VM application server
+allows access from DB2 Server for VM application requesters
+<B>only</B>. These application requesters and application server
+can be in either a local or remote environment. This option is the
+default.
+<P>When PROTOCOL=AUTO is specified, the DB2 Server for VM application server
+allows access from DB2 Server for VM and non-DB2 Server for VM application
+requesters. This parameter can only be specified if the DRDA code has
+been installed. It is used with the SYNCPNT parameter to control the
+DRDA environment. For more information, see the description of the
+SYNCPNT parameter and see <A HREF="arip2mst112.HTM#HDRDRDAE">Chapter 15,  Using a DRDA Environment</A>.
+<P>On the application server, the PROTOCOL parameter is specified using the
+SQLSTART EXEC. On the application requester, the SQLINIT EXEC also has
+a PROTOCOL parameter. When a connection is made between the application
+requester and the application server, the combination specified by these
+parameters determines whether the DRDA protocol or the SQLDS protocol is to be
+used for that connection.
+<P>You should be aware of the performance impacts of the chosen
+protocol. For a detailed explanation on protocols, see the <CITE>DB2 Server for VSE &amp; VM Performance Tuning Handbook</CITE>.
+<P>For a list of restrictions when using the DRDA protocol, see <A HREF="arip2mst157.HTM#HDRRESTDR">Appendix H,  DRDA Considerations</A>. For information on the SQLINIT EXEC, see the <CITE>DB2 Server for VSE &amp; VM Database Administration</CITE> manual.
+<P><H4><A NAME="HDRCHARN">CHARNAME</A></H4>
+<A NAME="IDX4316"></A>
+<A NAME="IDX4317"></A>
+<P>This section discusses the following: 
+<A NAME="IDX4318"></A>
+<P>
+<A NAME="IDX4319"></A>
+<P>
+<UL>
+<LI>Character set considerations at startup
+</LI><LI>National language considerations at startup.
+</LI></UL>
+<A NAME="IDX4320"></A>
+<A NAME="IDX4321"></A>
+<A NAME="IDX4322"></A>
+<A NAME="IDX4323"></A>
+<P><H5><A NAME="HDRCHARSTT">Character Set Considerations at Startup</A></H5>
+<P>Use the CHARNAME parameter to specify the CCSIDs to be
+used as the application server defaults. The default CCSIDs determine
+the character sets and code pages to be used to interpret statements and
+return results.
+<P>The valid CHARNAME values you can specify are ENGLISH (CCSID=37),
+INTERNATIONAL (CCSID=500), and all the values that are in the CHARNAME column
+of the SYSTEM.SYSCCSIDS catalog table.
+<P>The database manager obtains the CCSIDs associated with the CHARNAME by
+looking up the row of the SYSTEM.SYSCCSIDS catalog table where the
+CHARNAME column matches the CHARNAME parameter. It also obtains the
+classification and translation tables associated with the CHARNAME by looking
+up the row of the SYSTEM.SYSCHARSETS catalog table where the NAME
+column matches the CHARNAME parameter. The classification table is used
+to identify valid characters in identifiers. The translation table is
+used to indicate how to fold ordinary lowercase identifiers to
+uppercase.
+<P>For CHARNAMEs ENGLISH and INTERNATIONAL, their CCSID values, the
+classification table and the translation table are stored internally.
+The rows in SYSTEM.SYSCCSIDS and SYSTEM.SYSCHARSETS for these
+CHARNAMEs are for reference purposes only and are not used by the database
+manager.
+<P>During startup, if you do not specify the CHARNAME parameter, the
+application server uses the same CHARNAME that was used the last time it was
+started. 
+<A NAME="IDX4324"></A>
+ The values stored in the rows where SQLOPTION equals CHARNAME, CCSIDSBCS,
+CCSIDMIXED, and CCSIDGRAPHIC are for reference purposes only. They
+reflect the current values associated with the system. The only way to
+change the default values is by starting the application server with a
+different CHARNAME parameter. Any updates to the values in the
+SYSTEM.SYSOPTIONS table are ignored during startup. 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">The database manager determines the current default CHARNAME from the CCSID
+attribute of the CNAME character column in the SYSTEM.SYSCOLUMNS
+catalog table. If this value is null, then 37 is used (a CCSID of 37
+corresponds to a CHARNAME of ENGLISH). The database manager uses the
+CCSID value to locate the corresponding row in the ARISCCS MACRO file to
+obtain the associated CHARNAME. 
+<A NAME="IDX4325"></A>
+<P>
+<A NAME="IDX4326"></A>
+ The value in the CHARNAME column of this row is the current application
+server default CHARNAME.
+</TD></TR></TABLE>
+<P>When you specify a value for the CHARNAME parameter that is different from
+the current application server default CHARNAME, you are prompted to choose
+whether or not you want to change the application server default
+CHARNAME. If you specify YES and have supplied a valid CHARNAME value,
+the database manager updates the application server default values for
+CHARNAME, CCSIDSBCS, CCSIDMIXED, and CCSIDGRAPHIC. 
+<A NAME="IDX4327"></A>
+<A NAME="IDX4328"></A>
+<A NAME="IDX4329"></A>
+<A NAME="IDX4330"></A>
+<A NAME="IDX4331"></A>
+<P>
+<A NAME="IDX4332"></A>
+<A NAME="IDX4333"></A>
+<A NAME="IDX4334"></A>
+<A NAME="IDX4335"></A>
+<A NAME="IDX4336"></A>
+<P>
+<A NAME="IDX4337"></A>
+<P>
+<A NAME="IDX4338"></A>
+<P>
+<A NAME="IDX4339"></A>
+<P>
+<A NAME="IDX4340"></A>
+<P>
+<A NAME="IDX4341"></A>
+ It also modifies the CCSID attribute of all character columns that are part
+of the catalog tables to the application server default CCSID. The
+CCSID attribute of character columns that are not part of the catalog tables
+are not modified. If the value for CCSIDMIXED is not zero, this value
+is used as the application server default CCSID. If the value for
+CCSIDMIXED is zero, then the application server default CCSID is the value of
+CCSIDSBCS.
+<P>Note that the tables which have their CCSID modified when the CHARNAME is
+changed include: 
+<UL>
+<LI>All tables created by SYSTEM
+</LI><LI>The following tables created by SQLDBA: 
+<UL COMPACT>
+<LI>SQLDBA.ROUTINE
+</LI><LI>SQLDBA.STORED QUERIES
+</LI><LI>SQLDBA.SYSLANGUAGE
+</LI><LI>SQLDBA.SYSTEXT2
+</LI><LI>SQLDBA.SYSUSERLIST
+</LI></UL>
+</LI></UL>
+<P>
+<A NAME="IDX4342"></A>
+<P>
+<A NAME="IDX4343"></A>
+<P>
+<A NAME="IDX4344"></A>
+<P>When a CHARNAME is changed, the following should be considered: 
+<A NAME="IDX4345"></A>
+<P>
+<A NAME="IDX4346"></A>
+<P>
+<OL TYPE=1>
+<LI>The FIPS Flagger package <B>must</B> be reloaded by using the ARISDBMA
+EXEC. Failure to do this can cause SQLCODE=-931
+(SQLSTATE=58004). This will render the agent reporting the SQLCODE
+error unable to preprocess packages until the application server is
+started. Once the FIPS Flagger package is reloaded or repreprocessed,
+this error will not occur.
+</LI><LI>All views which are dependent on the tables that had their CCSID modified
+must be dropped and recreated. 
+<P>The following query lists all such view packages: 
+<PRE>  SELECT CREATOR, TNAME, PLABEL
+    FROM SYSTEM.SYSACCESS
+    WHERE TABTYPE  = 'V'
+    AND VALID = 'N'
+</PRE> 
+<P>This query is useful in that owners of affected views can be notified to
+drop and recreate their view before they try and use the view and get an error
+(SQLCODE=-835, SQLSTATE=56049, with SQLERRD1 set to -833).
+</LI><LI>All packages which are dependent on the tables that had their CCSID
+modified must be dropped and recreated. 
+<P>The following query lists all such packages: 
+<PRE>  SELECT CREATOR, TNAME, PLABEL
+    FROM SYSTEM.SYSACCESS
+    WHERE TABTYPE  = 'X'
+    AND VALID = 'N'
+</PRE> 
+<P>This query is useful in that owners of affected packages can be notified to
+rebind the packages instead of having them dynamically repreprocessed at run
+time. The DBS utility REBIND PACKAGE command can be used to rebind the
+packages listed.
+</LI><LI>The ISQL package (SQLDBA.ARIISQL) and DBS utility package
+(SQLDBA.ARIDSQL) can be reloaded and recreated using the ARISDBMA
+EXEC. If this is not done, the first time these packages are used, they
+will be dynamically repreprocessed.
+</LI></OL>
+<P>To check if all the above activities have been done, run the following
+query: 
+<PRE>  SELECT CREATOR, TNAME, PLABEL
+    FROM SYSTEM.SYSACCESS
+    WHERE VALID = 'N'
+</PRE>
+<P>If there are no rows found, all packages have been either recreated,
+reloaded, rebound or dynamically repreprocessed and the VALID column value for
+the package in SYSTEM.SYSACCESS has been changed to "Y".
+<P>Note that CCSID conversion of the data in catalog tables does not
+occur: only the CCSID attribute of the columns is modified. If
+you change the application server default CHARNAME, system objects of the
+character data type (for example, table names and column names) stored in the
+catalog may be displayed differently. The reason for this is that a
+code point may represent different characters in different code pages.
+<P>If you want to change the application server default CHARNAME, the default
+will not be changed if: 
+<UL>
+<LI>You specify an invalid value for the CHARNAME parameter
+</LI><LI>An error occurs in the verification of the 
+<UL COMPACT>
+<LI>New CHARNAME CCSID values
+</LI><LI>Classification table
+</LI><LI>Translation table.
+</LI></UL>
+</LI></UL>
+<P>When the application server is started, it records the application server
+default values for CHARNAME, CCSIDSBCS, CCSIDMIXED, and CCSIDGRAPHIC in the
+SYSTEM.SYSOPTIONS catalog table. To obtain these values, you can
+query the table. For example, to determine the name of the character
+set that is currently in use, issue: 
+<PRE>  SELECT VALUE
+    FROM SYSTEM.SYSOPTIONS
+    WHERE SQLOPTION = 'CHARNAME'
+</PRE>
+<P>For more information about character sets, see <A HREF="arip2mst91.HTM#HDRNATION">Chapter 13,  Choosing a National Language and Defining Character Sets</A>.
+<P><H5><A NAME="Header_149">National Language Considerations at Startup</A></H5>
+<A NAME="IDX4347"></A>
+<A NAME="IDX4348"></A>
+<P>You can use the SET LANGUAGE command from the operator console to choose a
+national language so that DB2 Server for VM messages can be received in the
+selected language. For more information see <A HREF="arip2mst104.HTM#HDRMULHELP">National Language Support for Messages and HELP Text</A>.
+<P><H4><A NAME="Header_150">ACCOUNT</A></H4>
+<A NAME="IDX4349"></A>
+<A NAME="IDX4350"></A>
+<A NAME="IDX4351"></A>
+<A NAME="IDX4352"></A>
+<P>This parameter enables the accounting facility. When ACCOUNT=D is
+specified, accounting records are generated and directed to the VM system
+accounting file. If the default value of ACCOUNT=N is specified,
+accounting information is not generated.
+<P>For a complete description of the accounting facility, see <A HREF="arip2mst80.HTM#HDRCHAP8">Chapter 11,  Using the Accounting Facility</A>.
+<P><H4><A NAME="Header_151">SYNCPNT</A></H4>
+<A NAME="IDX4353"></A>
+<A NAME="IDX4354"></A>
+<A NAME="IDX4355"></A>
+<A NAME="IDX4356"></A>
+<P>This parameter specifies whether or not a sync point manager (SPM) will be
+used to coordinate DRDA2 DUOW two-phase commit and resynchronization
+activity. It is only meaningful when PROTOCOL=AUTO.
+<P>If Y is specified, the server will use a sync point manager, if possible,
+to coordinate two-phase commits and resynchronization activity. If N is
+specified, the server will not use an SPM to perform two-phase commits.
+If N is specified, the database manager is limited to multi-read, single-write
+distributed units of work and it can be the single write site. If Y is
+specified, but the database manager finds that a sync point manager is
+<I>not</I> available, then the server will operate as if N was
+specified.
+<P>The default is SYNCPNT=Y, if PROTOCOL=AUTO.
+<P>
+<P><H4><A NAME="Header_152">DSPSTATS</A></H4>
+<A NAME="IDX4357"></A>
+<A NAME="IDX4358"></A>
+<A NAME="IDX4359"></A>
+<A NAME="IDX4360"></A>
+<P>This two digit parameter specifies what information is displayed and what
+level of detail is displayed. If 0 is specified, nothing is
+displayed. If 1 is specified, the minimum information is
+displayed. If 2 is specified, more detail is displayed. The
+positional digits correspond to the following informational displays:
+the first is checkpoint performance information and the second is counter
+information to be displayed at system shutdown.
+<P>If the first option is 1, then format 1 of message ARI2052I is displayed
+every time a checkpoint occurs. This is useful in determining how often
+checkpoints occur. If the first option is 2, then format 2 of message
+ARI2052I is displayed every time a checkpoint occurs. This is useful in
+determining if checkpoint processing is causing a performance problem.
+<P>If the second option is 1, then the "COUNTER *" operator command is
+issued just before the application server is shutdown. This is useful
+for performance tuning. If the dataspaces feature is being used,
+"COUNTER POOL *" command is also issued.
+<P>The SET command changes the value of this parameter without having to stop
+and restart the application server. For more information on the SET
+operator command, see the <CITE>DB2 Server for VSE &amp; VM
+Operation</CITE> manual.
+<P><H4><A NAME="Header_153">SECALVER</A></H4>
+<A NAME="IDX4361"></A>
+<A NAME="IDX4362"></A>
+<A NAME="IDX4363"></A>
+<P>This parameter determines if the application server will accept users that
+have already been verified by another system. If SECALVER=Y, verified
+users will be accepted. The requester only needs to send a user ID to
+be validated. If SECALVER=N, verified users will not be
+accepted. The requester must send a user ID and password to be
+verified.
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">This parameter is only used when validating users are connecting via TCP/IP
+or when users send the ACCSEC and SECCHK DRDA datastreams in their connect
+request.
+</TD></TR></TABLE>
+<P><H4><A NAME="Header_154">SECTYPE</A></H4>
+<A NAME="IDX4364"></A>
+<A NAME="IDX4365"></A>
+<A NAME="IDX4366"></A>
+<P>This parameter determines if the application server will validate a user ID
+and password for connect authority using an external security manager or by
+checking the DB2 SYSUSERAUTH catalog table. If SECTYPE=ESM an external
+security manager will be used to validate the user ID and password. The
+external security manager must support the RACROUTE application programming
+interface. If SECTYPE=DB2, the user ID and password are validated by
+checking the SYSUSERAUTH catalog table.
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">This parameter is only used when validating users are connecting via TCP/IP
+or when users send the ACCSEC and SECCHK DRDA datastreams in their connect
+request.
+</TD></TR></TABLE>
+<P><H4><A NAME="Header_155">TCPPORT</A></H4>
+<A NAME="IDX4367"></A>
+<A NAME="IDX4368"></A>
+<A NAME="IDX4369"></A>
+<P>This parameter specifies the TCP/IP port number that the application server
+will use to listen for incoming TCP/IP connect requests.
+<P>If this parameter is not specified, TCP/IP support will be initialized and
+the ETC SERVICES file on the TCP/IP client disk will be searched to determine
+the port number that the application server will use.
+<P>If this parameter is specified with a non-zero value, TCP/IP support will
+be initialized and the value specified will be used as the port number that
+the application server will use.
+<P>If this parameter is specified with a value of 0, TCP/IP support will not
+be initialized.
+<P><H4><A NAME="Header_156">Performance Parameters</A></H4>
+<P><H4><A NAME="HDRNCUS">NCUSERS</A></H4>
+<A NAME="IDX4370"></A>
+<A NAME="IDX4371"></A>
+<P>This parameter defines the maximum number of <I>real</I> agents that
+the database manager can actively handle at any one time, limiting the number
+of users that can be supported by the database manager. The value of
+NCUSERS is usually less than the number of connected users anticipated,
+because not all users will be accessing data at the same time. This
+value directly affects the size of the virtual machine required. 
+<A NAME="IDX4372"></A>
+<P>
+<A NAME="IDX4373"></A>
+<P>The number of NCUSERS is limited because some static agent storage for each
+real agent is obtained below 16 megabytes. See <A HREF="arip2mst131.HTM#TBLXSTORG1">Table 37</A>.
+<P><A HREF="#FIGNCUTBL">Figure 10</A> provides guidelines for setting the NCUSERS
+parameter. Because these are only guidelines, you should modify them to
+concur with the activity on your system. For additional information,
+see the <CITE>DB2 Server for VSE &amp; VM Performance Tuning
+Handbook</CITE>.
+<P><B><A NAME="FIGNCUTBL">Figure 10. Guidelines for the NCUSERS Parameter</A></B><BR>
+<TABLE BORDER ><TR><TD><BR>
+<PRE>&nbsp;
+NCUSERS=   1 for each 1-2 users of ISQL (or other query products)
+         + 1 for each 1-25 non-ISQL users
+           (variable on transaction workload)
+         + 1 for each 2-5 application program developers
+</PRE>
+<A NAME="IDX4374"></A>
+<A NAME="IDX4375"></A>
+<A NAME="IDX4376"></A>
+<A NAME="IDX4377"></A>
+</TD></TR></TABLE>
+<P>If you have application programs that maintain multiple logical units of
+work in separate CMS work units, each additional work unit used by an
+application at one time must be counted as an additional user.
+<P>Each ISQL user can generate a high level of system activity. If you
+set NCUSERS so that all ISQL users can be active at the same time
+(NCUSERS=number of ISQL users), you minimize the time that any one user must
+wait for services. However, if this number is large, it may cause the
+database manager to be overloaded. 
+<A NAME="IDX4378"></A>
+ To prevent this, you should also set the MAXCONN parameter of the VM OPTION
+directory control statement, which limits the number of users and the number
+of DASDs that a given virtual machine can access. For information on
+this parameter, see <A HREF="arip2mst53.HTM#HDROPCONS">Inter-Machine Communications</A>.
+<P>Application developers typically do a considerable amount of other activity
+(such as CMS file editing or output scanning). These users require less
+service from the database manager, so NCUSERS can be lowered
+accordingly.
+<P>If you are using VSE guest sharing, the NCUSERS of the VM database machine
+should be increased by the number required for the VSE guest. The
+demand for services from CICS transaction processing can vary widely,
+depending on the nature of the transactions.
+<P>The demand for services from batch application programs can also vary
+considerably. If you have online or interactive activity on the
+database manager, consider limiting the amount of concurrent SQL batch
+processing. 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">When the application server is started, there may be one or more in-doubt
+logical units of work (LUWs). The value of NCUSERS must be large enough to handle these. When they have been resolved,
+the DB2 Server for VM agent structures are used to handle new users.
+The creation and use of agent structures for resolving in-doubt LUWs takes
+precedence over all new user logical units of work. For more
+information about in-doubt LUWs, see <A HREF="arip2mst56.HTM#HDRRESIDT">Resolving In-Doubt Transactions</A>.
+</TD></TR></TABLE>
+<P><H4><A NAME="Header_158">NPACKAGE</A></H4>
+<A NAME="IDX4379"></A>
+<A NAME="IDX4380"></A>
+<P>This parameter defines the maximum number of packages in an LUW, and
+together with the value specified for NCUSERS, determines the size of the
+<I>package cache</I>. The size of the package cache limits the
+number of packages that can be present in storage simultaneously.
+(Package cache size = NPACKAGE&nbsp;x&nbsp;NCUSERS.) The default value of
+NPACKAGE is 10, and that for NCUSERS is 5, giving a default package cache of
+50, allowing 50 packages to be present in storage simultaneously.
+<P>In general, increasing the size of the package cache improves performance
+of the database manager. However, do not increase it to the point where
+system paging becomes too great. For more information, see the <CITE>DB2 Server for VSE &amp; VM Performance Tuning Handbook</CITE>.
+<P><H4><A NAME="Header_159">NPACKPCT</A></H4>
+<A NAME="IDX4381"></A>
+<A NAME="IDX4382"></A>
+<P>This parameter defines the percentage of the package cache that is used in
+the calculation of the package cache <I>threshold</I>. The size of
+the threshold determines the number of loaded packages that are kept in
+storage at the end of an LUW. (Threshold&nbsp;= NPACKPCT&nbsp;percent
+of&nbsp;package cache.) If the threshold is exceeded, the loaded
+packages are freed and returned to the package cache.
+<P>The default values for NPACKPCT and the package cache are 30 and 50
+respectively, giving a threshold of 15. In general, increasing the size
+of the threshold improves performance. For more information, see the
+<CITE>DB2 Server for VSE &amp; VM Performance Tuning
+Handbook</CITE>.
+<P><H4><A NAME="Header_160">NPAGBUF</A></H4>
+<A NAME="IDX4383"></A>
+<A NAME="IDX4384"></A>
+<A NAME="IDX4385"></A>
+<A NAME="IDX4386"></A>
+<A NAME="IDX4387"></A>
+<P>This parameter specifies the number of 4096-byte data pages kept in storage
+buffers at one time. The number of data buffers you want depends on the
+number of active users and the nature of their request. The default for
+NPAGBUF assumes an average of four buffer pages for each potentially active
+user (NCUSERS x 4), plus ten buffer pages for the buffering of catalog and log
+information.
+<P>In general, increasing NPAGBUF improves the performance of the database
+manager. However, increasing it also requires an increase in the size
+of the database machine. Also -- and more importantly -- it can cause
+an increase in the paging rate of the system. It is more efficient to
+let the database manager do more I/O operations than it is to let the system
+do more paging; database I/O operations are overlapped whereas system
+paging operations are not. Therefore do not increase NPAGBUF to the
+point where system paging becomes too great.
+<P>For more information about NPAGBUF, see the <CITE>DB2 Server
+for VSE &amp; VM Diagnosis Guide and Reference</CITE> manual.
+<P><H4><A NAME="Header_161">NDIRBUF</A></H4>
+<A NAME="IDX4388"></A>
+<A NAME="IDX4389"></A>
+<P>This parameter determines the number of 512-byte directory pages to be kept
+in storage. Increasing it reduces the number of I/O operations.
+Again, bigger is better, until you either run out of virtual storage or cause
+too much system paging. Each directory page addresses 128 data
+pages.
+<P>When you set NPAGBUF and NDIRBUF, you have to choose how to split buffer
+space between data pages and directory pages. At least initially, you
+should set them to the same value. Issue the COUNTER commands to see
+the actual I/O activity; then adjust NPAGBUF and NDIRBUF.
+<P>For more information about NDIRBUF, see the <CITE>DB2 Server
+for VSE &amp; VM Diagnosis Guide and Reference</CITE> manual.
+<P><H4><A NAME="Header_162">NLRBU and NLRBS</A></H4>
+<A NAME="IDX4390"></A>
+<A NAME="IDX4391"></A>
+<A NAME="IDX4392"></A>
+<A NAME="IDX4393"></A>
+<P>NLRBU specifies the maximum number of lock request blocks allowed for one
+active user, while NLRBS specifies the number allowed for <I>all</I>
+active users. (Usually, two lock request blocks are used for every lock
+that a user holds.)
+<P>The database manager can perform lock escalations, increasing the
+granularity of data being locked from either row or page level to dbspace
+level. In general, you only need to change the default values of NLRBU
+and NLRBS if contention problems occur. Increasing them reduces the
+number of lock escalations performed by the database manager. 
+<A NAME="IDX4394"></A>
+<A NAME="IDX4395"></A>
+<P>When either the NLRBU limit for a user is reached or the NLRBS limit is
+approached, lock escalation occurs. This results in fewer locks being
+required, and lock request blocks being freed. This in turn reduces the
+opportunities to share data. For example, when locking is done at a row
+level, many users may be updating the same dbspace at the same time.
+When it is escalated to the dbspace level, only one user can update rows in
+that dbspace. Everyone else must wait until that person's update
+is committed or rolled back.
+<P>Escalation can also cause deadlocks. A deadlock occurs when two or
+more LUWs are in wait states and dependent on the completion of LUWs that are
+also in wait states. For example, suppose two users are updating tables
+in a dbspace. When the lock size is escalated to a dbspace level, both
+users can be locked out, with each waiting for the other to complete an
+LUW. 
+<A NAME="IDX4396"></A>
+ The database manager resolves situations like these by rolling back the
+newest LUW. For more about locking, see the <CITE>DB2
+Server for VSE &amp; VM Application Programming</CITE> manual.
+<P>If the default values for NCUSERS (5) and NLRBU (1000) are used, the
+database manager defines 2520 lock request blocks, each of which requires 24
+bytes; 60480 bytes of virtual storage are required for lock request
+blocks. With these defaults, one application could use 1000 lock
+request blocks and four other applications could simultaneously use an average
+of 370 lock request blocks each, before causing an escalation.
+<P>Even though two lock request blocks are needed for each lock, the default
+values allow a large number of locks for each application. With the
+defaults, one application could use 500 locks while four other applications
+use an average of 185 locks each.
+<P>You should use the NLRBU and NLRBS default values at first, and increase
+them if users either are experiencing delays when they access the database
+manager, or if they are receiving SQLCODEs of -911, -912, or -915 (rollbacks
+that occur because of deadlock, insufficient lock request blocks for the
+database manager, or insufficient lock request blocks for a user application,
+respectively). 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">These SQLCODEs may also be received during preprocessing, as the locks are
+required then as well.
+</TD></TR></TABLE> 
+<A NAME="IDX4397"></A>
+<P>
+<A NAME="IDX4398"></A>
+<P>To test the frequency of lock escalations and of deadlocks, use the COUNTER
+operator command. Specify both the ESCALATE and the LOCKLMT counters to
+get the number of successful escalations and the number of unsuccessful
+escalation attempts respectively. 
+<A NAME="IDX4399"></A>
+<A NAME="IDX4400"></A>
+ (An escalation can fail if the LUW that reached the lock limit is rolled back
+because of a deadlock, or if a sufficient number of lock request blocks cannot
+be freed.) For example, suppose the operator issues the command
+<TT>COUNTER ESCALATE LOCKLMT</TT> a few times a day and normally receives
+results in the range of 10 to 150 for ESCALATE, and 0 to 5 for LOCKLMT.
+If, one day, the results are 428 for ESCALATE and 23 for LOCKLMT, a locking
+problem would be indicated.
+<P>
+<A NAME="IDX4401"></A>
+<P>
+<A NAME="IDX4402"></A>
+ In addition, the <TT>SHOW LOCK MATRIX</TT> command can be used to display
+information about lock request block usage to determine whether unexpected
+delays are caused by locking; to monitor how the database manager is
+using lock request blocks; and to determine the lock request blocks
+required for a single application or for a run of a preprocessor.
+<P>One of the values displayed is called MAX USED BY LUW: the maximum
+number of lock request blocks used by any one application during an
+LUW. (When any LUW starts to exceed NLRBU and the escalation process
+occurs, MAX USED BY LUW is set to zero.) All this information can help
+you determine the required values for NLRBU and NLRBS.
+<P>To establish the lock request block requirements for running a
+preprocessor, or for an application that is causing contention problems:
+<P>
+<OL TYPE=1>
+<LI>Start the application server in multiple user mode with NCUSERS=1, NLRBU
+about five times its current setting, and NLRBS set to the same value as
+NLRBU.
+</LI><LI>Start the application and allow it to complete processing.
+</LI><LI>Verify that no escalation occurred by displaying the ESCALATE and LOCKLMT
+counters. If no escalation occurred, MAX USED BY LUW will show the
+number of lock request blocks required.
+</LI><LI>If an escalation did occur, set NLRBU to a value greater than or equal to
+MAX USED BY LUW, then start the application server again, and rerun the
+application.
+</LI></OL>
+<P>If necessary, reset NLRBS. For example, suppose NLRBU is set to
+1100, and two users will run their applications -- each requiring 1100 lock
+request blocks -- at the same time. Also assume that any other
+application requires about 500 lock request blocks. If NCUSERS is 5,
+then set NLRBS to at least 3700 (1100 for each of two applications and 500 for
+each of three additional applications).
+<P>If an application requires more lock request blocks than you have virtual
+storage for, you should consider the following alternatives: 
+<UL>
+<LI>Use either the SQL <I>ALTER DBSPACE</I> or the SQL LOCK statement to
+change the locking level of the dbspace used by the application. The
+ALTER statement permanently changes the locking level for all applications,
+while the LOCK statement can be inserted into an application, and used to
+change the locking level only when that application runs. The LOCK
+statement is the preferred way to temporarily modify the locking level,
+because it involves no update to the catalog tables.
+</LI><LI>Consider changing the application: perhaps it is holding locks
+longer than necessary. Additional SQL <I>COMMIT WORK</I> statements
+in the application may necessitate fewer locks.
+</LI><LI>Consider running the application by itself: either in single user
+mode, where no locking is required, or in multiple user mode with a reduced
+NCUSERS and with NLRBU and NLRBS set as required.
+</LI></UL>
+<P>For more information about locking problems and how to solve them, see the
+<CITE>DB2 Server for VSE &amp; VM Diagnosis Guide and
+Reference</CITE> manual.
+<P><H4><A NAME="Header_163">DISPBIAS</A></H4>
+<P>This parameter determines how the dispatcher selects the order in which
+agents get serviced by the database manager. 
+<A NAME="IDX4403"></A>
+<P>
+<A NAME="IDX4404"></A>
+<P>
+<A NAME="IDX4405"></A>
+<P>
+<A NAME="IDX4406"></A>
+<P>
+<A NAME="IDX4407"></A>
+<P>
+<A NAME="IDX4408"></A>
+<P>
+<A NAME="IDX4409"></A>
+<P>
+<A NAME="IDX4410"></A>
+<P>
+<A NAME="IDX4411"></A>
+ To set it, you need to understand how the dispatcher works. Only one
+agent at a time can be serviced; the other agents wait in a queue.
+Within this queue, agents are prioritized according to their estimated
+resource consumption: those estimated to consume the least are placed at
+the top, while those estimated to consume the most are placed at the
+bottom.
+<P>When the active agent returns to the dispatcher, the next agent at the top
+of the queue is dispatched. Every time an agent is dispatched, the
+database manager reevaluates the priority of the remaining agents, and
+requeues them according to their new priorities.
+<P>A pure priority dispatcher can present some problems, however. If
+many short-running LUWs are present, the longer-running ones may never get
+serviced: they are always at the bottom of the queue. To avoid
+this problem, <I>fair-share auditing</I> is used, whereby 
+<A NAME="IDX4412"></A>
+ all the agents in the queue are checked periodically to see if they are
+receiving adequate service. When one is found that is not, its priority
+is changed and it is moved to the top of the queue.
+<P>If fair-share auditing is done frequently, the dispatcher tends to operate
+more like a <I>round-robin</I> dispatcher: agents get equal service
+because those at the bottom of the queue get bumped to the top more
+frequently. If it is done infrequently, the dispatcher tends to operate
+more like a <I>priority</I> dispatcher: agents get prioritized
+service because long-running agents are forced to wait at the bottom of the
+queue longer. (Eventually, fair-share auditing causes these agents to
+get service.)
+<P>The DISPBIAS parameter determines how often fair-share auditing is
+done. When it is set low (near 1), fair-share auditing is done
+frequently, and the dispatcher operates more in round-robin mode. When
+it is set high (near 10), fair-share auditing is done infrequently, and the
+dispatcher operates more in priority mode.
+<P>Initially, you should use the DISPBIAS default of 7. If your
+long-running LUWs are getting poor service, you may want to use a lower
+value; if your ISQL users are often waiting for long-running applications
+to complete, you may want to use a higher value. You can use the SET
+operator command to change the value of DISPBIAS without having to stop and
+restart the application server. See the <CITE>DB2 Server
+for VSE &amp; VM Operation</CITE> manual for more information on the SET operator command.
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">Any changes you make using the SET command are only in effect while the
+application server is running. If you stop and restart the application
+server, it will use the settings you specified in the startup
+procedure.
+</TD></TR></TABLE>
+<P>You may be tempted to set DISPBIAS to 10 to get good response time for ISQL
+users. Keep in mind, however, that a long-running LUW can hold a large
+number of locks. If other users are waiting for those locks, they must
+wait until the application frees them. If the application is waiting at
+the bottom of the queue, everyone is waiting. In this situation, you
+would want to have fair-share auditing occur more frequently, so the
+long-running unit can free the resources it has locked. The default of
+seven represents a balance between the interests of long-running and
+short-running LUWs.
+<P><H4><A NAME="Header_164">NCSCANS</A></H4>
+<A NAME="IDX4413"></A>
+<A NAME="IDX4414"></A>
+<A NAME="IDX4415"></A>
+<P>This parameter determines the number of internal control scan blocks kept
+for accessing tables and indexes. These blocks can vary in size and
+number depending on the type of query being performed. This discussion
+is concerned with long-running requests that might be queries or database
+change operations.
+<P>Scan control blocks contain positioning information related to a
+query. The positioning information can result from a user-defined
+cursor or by an internal cursor created by RDS. If an index is involved
+in the query, the size of the scan control block depends on the key size for
+that index. An average scan control block is assumed to be 50 bytes (32
+bytes for control information, and an average key length of 18 bytes).
+<P>The maximum table size to hold the scan control block entries for each
+agent is 32 kilobytes (32768 bytes). This can contain 655 entries of
+50-byte scan control blocks, which 
+<A NAME="IDX4416"></A>
+ in general, is enough to support 255 user-declared cursors. If,
+however, the key lengths for indexes are long, the scan table supports fewer
+user cursors. For example, if the key length for a given index
+associated with a cursor is 255 bytes, an entry would require 287
+(255&nbsp;+&nbsp;32) bytes, and the maximum number of cursors possible using
+that index would be 114 (32 kilobytes divided by 287). That number
+would be reduced if the DB2 Server for VM requests caused internal cursors to
+be created. Internal cursors are always smaller than 50 bytes, and
+cannot use index keys.
+<P>If you have many complex requests, you may have to increase NCSCANS.
+If it is not set to a high enough value, users will get SQLCODE -522.
+For information on the virtual storage used by NCSCANS, see <A HREF="arip2mst131.HTM#HDRXVTOR">Initial Virtual Storage Requirements of Components</A>. 
+<A NAME="IDX4417"></A>
+<P>
+<A NAME="IDX4418"></A>
+<P><H4><A NAME="Header_165">LTIMEOUT</A></H4>
+<A NAME="IDX4419"></A>
+<A NAME="IDX4420"></A>
+<P>This parameter specifies a general lock wait timeout period for any SQL
+application, and especially as the way to avoid global deadlocks for DUOW
+applications.
+<P>The range of the LTIMEOUT value is 0 to 99999 seconds. The value of
+zero indicates that no lock timeout should be enforced for agents connected to
+this database. This is the default value for a database.
+<P>A nonzero lock timeout value will cause any agents waiting for a lock to
+have their current transaction rolled back when the lock timeout period has
+expired. The agent will notify the application that a lock timeout has
+occurred with SQLCODE -911 (SQLSTATE 40001). A reason code will be
+returned to indicate whether it is a deadlock or lock timeout situation
+(reason code 2 for a deadlock situation and reason code 68 for a lock timeout
+situation). The lock timeout period begins at the moment an agent
+requests a lock on any database resource. The full lock timeout period
+is allowed for each lock request.
+<P>The lock timeout control parameter should be adjusted in those environments
+where lock contention between applications has started to affect the desired
+performance and concurrency levels.
+<P>If a lock timeout is required for your environment, it is recommended that
+your starting value be equivalent to the maximum period of time that you want
+an application to wait for a lock.
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">The LTIMEOUT parameter is changed through the SET operator command.
+The timeout value will affect any users currently in LOCK WAIT. If a
+user has been in a LOCK WAIT for 100 seconds and the value of LTIMEOUT is set
+to a value less than 100, that user will receive a timeout. For more
+information on the SET operator command, see the <CITE>DB2 Server
+for VSE &amp; VM Operation</CITE> manual.
+</TD></TR></TABLE>
+<P>If lock timeout control is activated, you should ensure that all
+applications recognize and can handle the -911 SQLCODE that may be received as
+the result of a lock timeout initiated rollback. 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">New units of work that are waiting to begin because a log archive is running
+or is scheduled to run are in a lock wait. The SHOW LOCK WANTLOCK
+operator command shows these units of work waiting to acquire an IX lock on
+the database. Because log archives can potentially take a significant
+amount of time to complete, units of work in this particular type of lock wait
+are ignored by the lock timeout function.
+</TD></TR></TABLE>
+<P><H4><A NAME="Header_166">PROCMXAB</A></H4>
+<A NAME="IDX4421"></A>
+<A NAME="IDX4422"></A>
+<A NAME="IDX4423"></A>
+<P>This parameter specifies the number of times a stored procedure is allowed
+to terminate abnormally, after which a STOP PROC ACTION REJECT is performed
+against the procedure and all subsequent SQL CALL statements for that
+procedure are rejected. Note that a timeout that occurs while waiting
+for a stored procedure server to be assigned for an SQL CALL statement is not
+included in this count.
+<P>PROCMXAB must be an integer between 0 and 255. The default, 0, means
+that the first abend of a stored procedure causes SQL CALLs to that procedure
+to be rejected. For production systems, you should accept the
+default.
+<P><H4><A NAME="Header_167">PTIMEOUT</A></H4>
+<A NAME="IDX4424"></A>
+<A NAME="IDX4425"></A>
+<A NAME="IDX4426"></A>
+<P>This parameter specifies: 
+<UL>
+<LI>The number of seconds before DB2 Server for VSE &amp; VM ceases to wait
+for an SQL CALL to be assigned to a stored procedure server. If the
+PTIMEOUT interval expires, the SQL CALL statement fails.
+</LI><LI>The number of seconds before DB2 Server for VSE &amp; VM ceases to wait
+for the START PSERVER command to complete. If the PTIMEOUT interval
+expires, a message is displayed and the START PSERVER command
+terminates.
+</LI></UL>
+<P>The default for PTIMEOUT is 180.
+<P><H4><A NAME="Header_168">Recovery Parameters</A></H4>
+<P>
+<P><H4><A NAME="Header_169">LOGMODE</A></H4>
+<P>This parameter determines whether archives will be taken for the
+database and the log. Specify LOGMODE=A to maintain an archive of the
+database, LOGMODE=L to maintain an archive of the log, and LOGMODE=Y if you
+want logging but do not want the log archived.
+<P>LOGMODE=A allows you to restore the database and apply the current
+log. LOGMODE=L allows you to maintain a database archive as well as log
+archives. The database archive followed by the log archives are applied
+during restore, then the current log is applied.
+<P>Use LOGMODE=A or L if it is important to protect the database against media
+(DASD) failures; otherwise use LOGMODE=Y. 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">Each sequence of log archives must be preceded by a database archive, so if
+you use LOGMODE=L, you must occasionally take a database archive. You
+do not need to switch to LOGMODE=A to do so.
+</TD></TR></TABLE> 
+<A NAME="IDX4427"></A>
+<P>
+<A NAME="IDX4428"></A>
+<P>
+<A NAME="IDX4429"></A>
+<P>For more information on LOGMODE, see <A HREF="arip2mst72.HTM#HDRCHLMOD">Choosing a Log Mode</A>.
+<P><H4><A NAME="Header_170">CHKINTVL</A></H4>
+<P>This parameter determines how often a checkpoint is taken. A
+<I>checkpoint</I> is an internal operation in which data and status
+information is written to permanent (DASD) storage, and a summary status
+record is written to the log. A checkpoint causes two important
+events: 
+<UL>
+<LI>Storage pool space is freed. 
+<A NAME="IDX4430"></A>
+<P>
+<P>As updates to data occur, duplicate copies of changed data pages are
+maintained. These copies (called <I>shadow pages</I>) are kept in
+the storage pools of the pages that were changed. A checkpoint frees
+the shadow pages, and thereby frees the storage pool space where they are
+kept.
+</LI><LI>Log space may be freed. 
+<A NAME="IDX4431"></A>
+<P>
+<P>If LOGMODE=Y, a checkpoint typically frees log space by moving the logical
+beginning of the log forward to the beginning of the oldest LUW still active
+at the time of the checkpoint. If LOGMODE=A or L, log space is only
+freed when an archive is taken; not on every checkpoint.
+</LI></UL>
+<P>Checkpoints are taken periodically: however, by the time one is
+taken, there may be a large amount of data to be committed. If a
+failure should occur before it is committed, much processing may need to be
+redone after the database is restored.
+<P>The CHKINTVL parameter lets you take checkpoints at predetermined
+intervals. Its value is specified in terms of the number of log pages
+written between checkpoints. You can use the SET operator command to
+change the value of CHKINTVL without having to stop and restart the
+application server. See the <CITE>DB2 Server for VSE &amp;
+VM Operation</CITE> manual for more information on the SET operator command.
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">Any changes you make using the SET command are only in effect while the
+application server is running. If you stop and restart the application
+server, it will use the settings you specified in the startup
+procedure. 
+<A NAME="IDX4432"></A>
+<P>
+<A NAME="IDX4433"></A>
+<P>
+<A NAME="IDX4434"></A>
+<A NAME="IDX4435"></A>
+</TD></TR></TABLE>
+<P>By setting it low, you minimize the risk of filling the log or storage
+pools. However, because checkpoints are time-consuming operations that
+suspend SQL processing until they are completed, they should be taken
+infrequently. For more information on setting CHKINTVL, see the <CITE>DB2 Server for VSE &amp; VM Performance Tuning Handbook</CITE>. 
+<A NAME="IDX4436"></A>
+<A NAME="IDX4437"></A>
+<P><H4><A NAME="HDRXSLOGC">SLOGCUSH</A></H4>
+<P>This parameter defines the point at which the log cushion
+is entered and log-full processing begins. 
+<A NAME="IDX4438"></A>
+ Its value is expressed in terms of the percentage of the log size. The
+default of 90 means that when the log is 90% full, log-full processing will be
+initiated.
+<P>In log-full processing, the oldest active LUWs are rolled back until enough
+log space is freed to bring the percentage of the log in use below the
+SLOGCUSH level. Ideally, checkpoints and archiving would continually
+free log space so that the log would never reach the SLOGCUSH level.
+<P>If the log should become 100% full, the database manager would end
+abnormally, so you should set SLOGCUSH to a value that allows log-full
+processing to take effect (free some log space) before this happens. 
+<A NAME="IDX4439"></A>
+<A NAME="IDX4440"></A>
+ If the database manager is ending with log-full conditions, you may want to
+lower the SLOGCUSH value or increase the size of your log minidisks.
+<P><H4><A NAME="HDRPCT">ARCHPCT</A></H4>
+<A NAME="IDX4441"></A>
+<P>This parameter can be used to define a point at which an archive is
+automatically initiated. 
+<A NAME="IDX4442"></A>
+<P>
+<A NAME="IDX4443"></A>
+ It is used only when LOGMODE=A or L is specified. Like SLOGCUSH, its
+value is expressed in terms of a percentage of the log.
+<P>Archives free up log space; however, they take some time to
+complete. If the SLOGCUSH value is reached during an online archive
+operation, all SQL processing is suspended until the archive is done.
+For this reason, it is best to ensure that archives are initiated in time to
+finish before the log fills to the SLOGCUSH percentage. This is done by
+setting the value of ARCHPCT lower than the value of SLOGCUSH.
+<P>When the log becomes full to the ARCHPCT value, a message is issued to the
+database machine operator to mount an archive tape and identify the virtual
+address (<VAR>cuu</VAR>) of the tape drive. The database manager then
+takes a database or log archive depending on whether you have LOGMODE set to A
+(database) or L (log).
+<P>If LOGMODE=L, the operator can also direct the log archive to disk.
+For more information, see <A HREF="arip2mst73.HTM#HDRARCHL">Log Archiving to Disk</A>.
+<P>Normally, the operator explicitly archives the database or the log before
+the ARCHPCT value is reached, by issuing one of the archive commands.
+If the ARCHPCT is reached, meaning that the log is almost full, the action
+that the database manager takes depends on the LOGMODE that is in
+effect. See 
+<A NAME="IDX4444"></A>
+<P>
+<A NAME="IDX4445"></A>
+ <A HREF="#TBLXLOG">Table 5</A> for a summary of these actions.
+<BR>
+<P><B><A NAME="TBLXLOG">Table 5. Summary of Activity When ARCHPCT Level Is Reached</A></B><BR>
+<TABLE WIDTH="100%" BORDER>
+<TR>
+<TH ALIGN="LEFT" VALIGN="BOTTOM" WIDTH="17%">LOGMODE Parameter
+</TH><TH ALIGN="LEFT" VALIGN="BOTTOM" WIDTH="83%">Activity When ARCHPCT is Reached
+</TH></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="17%"><B>A</B>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="83%">An operator message is issued that requests a database archive.
+</TD></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="17%"><B>L</B>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="83%">An operator message is issued that requests a log archive.
+</TD></TR><TR>
+<TD ALIGN="LEFT" VALIGN="TOP" WIDTH="17%"><B>Y</B>
+</TD><TD ALIGN="LEFT" VALIGN="TOP" WIDTH="83%">Because the log cannot be archived, the value for ARCHPCT is
+ignored. When the log is full it wraps. If an LUW spans the
+entire log, a ROLLBACK WORK is forced for that LUW.
+</TD></TR></TABLE>
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">To see how full the log is, you can issue the <TT>SHOW LOG</TT>
+command. For a description of this command, see the <CITE>DB2 Server for VSE &amp; VM Operation</CITE> manual.
+</TD></TR></TABLE>
+<A NAME="IDX4446"></A>
+<A NAME="IDX4447"></A>
+<P><H4><A NAME="Header_173">SOSLEVEL</A></H4>
+<P>This parameter defines the storage cushion for storage pools. 
+<A NAME="IDX4448"></A>
+<P>
+<A NAME="IDX4449"></A>
+ Its value is expressed as a percentage of space remaining in a storage
+pool. In multiple user mode processing (and single user mode processing
+where LOGMODE is not N), if any storage pool gets full to the point where only
+the SOSLEVEL percentage of storage pool pages is still free, a checkpoint is
+taken to free any shadow pages in use.
+<P>If, following this, only enough pages are freed to bring the number of free
+pages just above the SOSLEVEL, frequent checkpointing could occur. For
+more information, see the <CITE>DB2 Server for VSE &amp; VM
+Diagnosis Guide and Reference</CITE> manual. If, however, the number of free storage pool pages is still at
+or below SOSLEVEL, message ARI0202I is issued once to inform the user that the
+number of free pages left in the storage pool is fewer than the
+SOSLEVEL. This message is also issued once in single user mode with
+LOGMODE=N, but no checkpoint is taken.
+<P>
+<B>Attention:</B> If message ARI0202I is received, it indicates some
+action may be needed to prevent imminent filling of the storage pool.
+<P>One possible action is to stop the application server and extend that
+storage pool with the SQLADBEX EXEC. However, you can remedy the
+situation without stopping the application server if you have set SOSLEVEL
+high enough to give you adequate warning. When the message is received,
+proceed to remove unneeded data from the storage pool, either by dropping
+dbspaces or tables, or by reorganizing the data with a smaller percentage of
+free space for each page. In order to do this, you must have adequate
+warning to schedule the necessary processing.
+<P><H4><A NAME="Header_174">Service Parameters</A></H4>
+<P>
+<P><H4><A NAME="Header_175">DUMPTYPE</A></H4>
+<P>This parameter defines whether or not dumps are to be taken, and the
+amount of information to be dumped if they are. 
+<A NAME="IDX4450"></A>
+<P>
+<A NAME="IDX4451"></A>
+<P>DUMPTYPE=N indicates that a dump is not taken.
+<P>DUMPTYPE=F gives you a full dump of the virtual machine, as well as any
+saved segments it uses. This occurs on some error conditions and trace
+points.
+<P>DUMPTYPE=P gives you a partial dump of the database machine on certain
+error conditions. A dump is <I>not</I> taken when a limit error
+(message ARI0039E) or hardware error (message ARI0041E) occurs, or when a user
+specification error is detected. 
+<A NAME="IDX4452"></A>
+<P>
+<A NAME="IDX4453"></A>
+ (If you specify the DUMP keyword in the TRACE ON command, DUMPTYPE=P also
+generates partial dump output to the trace file for a specified trace point in
+the database manager.) The partial dump provides a dump of control
+blocks and other dynamically obtained virtual storage in the database
+machine.
+<P>You can use the SET operator command to change the value of DUMPTYPE
+without having to stop and restart the application server. See the <CITE>DB2 Server for VSE &amp; VM Operation</CITE> manual for more information on the SET operator command.
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">Any changes you make using the SET command are only in effect while the
+application server is running. If you stop and restart the application
+server, it will use the settings you specified in the startup
+procedure.
+</TD></TR></TABLE>
+<P>For more information on dumps, see the <CITE>DB2 Server for
+VSE &amp; VM Diagnosis Guide and Reference</CITE> manual.
+<P><H4><A NAME="Header_176">EXTEND</A></H4>
+<P>This parameter specifies whether or not special recovery commands are
+processed at startup. 
+<A NAME="IDX4454"></A>
+<P>
+<A NAME="IDX4455"></A>
+ Only set it to Y when you have a DBSS processing error or a severe user
+error. For more information on this parameter, see the discussion on
+starting the application server to recover from DBSS errors in the <CITE>DB2 Server for VSE &amp; VM Diagnosis Guide and Reference</CITE> manual.
+<P><H4><A NAME="Header_177">TRACDBSS, TRACRDS, TRACWUM, TRACDRRM, TRACDSC, TRACCONV, and TRACSTG</A></H4>
+<P>
+<A NAME="IDX4456"></A>
+<A NAME="IDX4457"></A>
+<A NAME="IDX4458"></A>
+<A NAME="IDX4459"></A>
+<P>
+<A NAME="IDX4460"></A>
+<P>
+<A NAME="IDX4461"></A>
+<P>
+<A NAME="IDX4462"></A>
+<P>
+<A NAME="IDX4463"></A>
+<P>
+<A NAME="IDX4464"></A>
+<P>
+<A NAME="IDX4465"></A>
+<P>
+<A NAME="IDX4466"></A>
+<P>
+<A NAME="IDX4467"></A>
+ These parameters 
+<A NAME="IDX4468"></A>
+<A NAME="IDX4469"></A>
+<A NAME="IDX4470"></A>
+<P>
+<A NAME="IDX4471"></A>
+<P>
+<A NAME="IDX4472"></A>
+<P>
+<A NAME="IDX4473"></A>
+ call the trace facilities during startup (as opposed to the TRACE operator
+command). Except for TRACWUM and TRACDRRM (which are not supported in
+single user mode), they are used primarily for tracing in single user mode,
+but can be set in multiple user mode if you want to start tracing as soon as
+possible. For information about tracing, refer to the <CITE>DB2 Server for VSE &amp; VM Operation</CITE> manual.
+<P><H4><A NAME="Header_178">TRACEBUF</A></H4>
+<A NAME="IDX4474"></A>
+<A NAME="IDX4475"></A>
+<A NAME="IDX4476"></A>
+<A NAME="IDX4477"></A>
+<P>This parameter specifies the amount of memory (in kilobytes) to allocate to
+the trace buffer. Specifying a nonzero value causes trace output to be
+stored in a fixed size buffer in memory. Trace records are stored in
+wrap-around mode in this buffer, and when tracing is turned off, the contents
+of the buffer are written to disk or to tape (as specified by the ARITRAC FILEDEF statement). The trace buffer is only created if you specify TRACEBUF with at
+least one of the startup initialization parameters TRACRDS, TRACDBSS, TRACDSC,
+TRACCONV, TRACDRRM, TRACWUM, or TRACSTG; it is not created if the
+TRACEBUF default (n=0) is specified. A suggested size for the trace
+buffer is 100 kilobytes or more. If you do not specify TRACEBUF and
+tracing is requested, trace records are written directly to disk or tape as
+the trace points are processed.
+<P><H3><A NAME="Header_179" HREF="arip2mst02.HTM#ToC_179">Single User Mode Initialization Parameters</A></H3>
+<P><A HREF="#FIGXINITT2">Figure 11</A> identifies the initialization parameters that apply when
+the database manager is operating in single user mode. 
+<A NAME="IDX4478"></A>
+<P>
+<A NAME="IDX4479"></A>
+<P>
+<A NAME="IDX4480"></A>
+<P>
+<P><B><A NAME="FIGXINITT2">Figure 11. Single User Mode Initialization Parameters</A></B><BR>
+<B><BR><IMG SRC="ARIP2IT1.GIF" ALT="REQTEXT"><BR></B><BR>
+<P>
+<A NAME="IDX4481"></A>
+<P>
+<P>Most of the considerations for setting these parameters are the same as
+those described under <A HREF="#HDROVERR">Multiple User Mode Initialization Parameters</A>, with the following exceptions: 
+<UL>
+<LI>The value of SYSMODE is S, which specifies that the database manager is
+dedicated to a single application.
+</LI><LI>The database manager does not generate accounting records when
+STARTUP=C|E|L|S|I|M, which are special situations. For more
+information, see the <CITE>DB2 Server for VSE &amp; VM
+Operation</CITE> manual.
+</LI><LI>The DBMODE parameter does not apply.
+</LI><LI>The PROTOCOL parameter does not apply.
+</LI><LI>The SYNCPNT parameter does not apply.
+</LI><LI>The PROGNAME parameter is required (except when STARTUP=C|E|L|S|I|M, which
+are special cases), to identify the application program to be run.
+</LI><LI>The NCUSERS parameter is not used; it defaults to 1.
+</LI><LI>The DISPBIAS parameter does not apply.
+</LI><LI>The NLRBS and NLRBU parameters are omitted (there is no locking in single
+user mode).
+</LI><LI>The LOGMODE parameter can take the value N, which specifies that changes
+made by the application program are not to be logged. 
+<P>If LOGMODE=N, database changes are only committed when a checkpoint is
+explicitly taken (with COMMIT WORK statements). 
+<P>The ARCHPCT parameter cannot be specified if LOGMODE=N.
+</LI><LI>The TRACDRRM and TRACWUM parameters do not apply.
+</LI></UL>
+<P>
+<P><H3><A NAME="HDRSQLTAPE" HREF="arip2mst02.HTM#ToC_180">Tape Support</A></H3>
+<A NAME="IDX4482"></A>
+<A NAME="IDX4483"></A>
+<A NAME="IDX4484"></A>
+<A NAME="IDX4485"></A>
+<P>The database manager can use tape files for recording archive and trace
+information. You can also use tape files with the DATALOAD/DATAUNLOAD
+and RELOAD/UNLOAD facilities of the DBS utility. (It is also possible
+to use tape files for the DB2 Server for VM preprocessors, but this is
+unusual.)
+<P>For the archive and trace tape files, the IBM-supplied EXECs that starts
+these facilities provide default CMS FILEDEF commands for the needed
+tapes. These default FILEDEFs are shown under the descriptions of the
+EXECs that call them.
+<P>You can also take log archives to disk. For more information, see <A HREF="arip2mst73.HTM#HDRARCHL">Log Archiving to Disk</A>.
+<P>For the DBS utility tape files, you must supply your own CMS FILEDEF
+commands. You can also specify LABELDEF commands. You should use
+the LABELDEF command for multivolume standard label tapes.
+<P>To specify your own FILEDEF and LABELDEF commands, issue them before
+invoking the EXEC that calls the facility. When an IBM-supplied EXEC
+issues a CMS FILEDEF command for tape files, it uses the NOCHANGE
+parameter. This means that any FILEDEF (or LABELDEF) that you supply
+before running the EXEC overrides the default. 
+<A NAME="IDX4486"></A>
+<P>
+<A NAME="IDX4487"></A>
+<P>
+<A NAME="IDX4488"></A>
+<P>
+<A NAME="IDX4489"></A>
+<P>The database manager uses the CMS simulation of OS QSAM for its tape
+support. The database manager also provides additional support, as
+follows: 
+<UL COMPACT>
+<LI>Unlabeled tapes and IBM (EBCDIC) standard labels
+</LI><LI>Multivolume tape files (with standard labels only)
+</LI><LI>Spanned records for both input and output
+</LI></UL>
+<P>The following sections discuss considerations for using tape
+support.
+<P><H4><A NAME="Header_181">Unlabeled Tapes</A></H4>
+<A NAME="IDX4490"></A>
+<A NAME="IDX4491"></A>
+<P>When using unlabeled tape output files, you should be aware of the
+following: 
+<UL>
+<LI>The mounted tape must not contain a volume label (VOL1). If it
+does, tape OPEN processing fails.
+</LI><LI>For output files, if end-of-volume is reached before the tape is closed,
+CMS ends abnormally.
+</LI><LI>A database or log archive cannot span multiple tapes if they are
+unlabeled tapes. Standard labeled tapes must be used for multiple
+volume tape archives.
+</LI></UL>
+<P><H4><A NAME="Header_182">Labeled Tapes</A></H4>
+<A NAME="IDX4492"></A>
+<A NAME="IDX4493"></A>
+<P>When using standard label tapes, you should ensure that the mounted tape
+volume (or volumes) contain volume labels (VOL1) and file labels
+(HDR1). These labels must be recorded in the same tape density as
+specified (or allowed to take the default) when creating the new file.
+If you do not ensure that the labels are recorded in the same density as
+specified when creating the new file, tape OPEN processing fails.
+<P>You can use the CMS TAPE command to check whether a volume contains a
+volume label (and display the label's contents) with the DVOL1
+keyword. (You must supply the TAP<VAR>n</VAR> parameter as
+appropriate.)
+<P>You can also use the CMS TAPE command to create a volume label (VOL1) and
+dummy HDR1 label with the WVOL1 keyword. (Once again, you must supply
+the TAP<VAR>n</VAR> and DEN parameters as appropriate.) The tape volume
+label must be recorded in the same density as the file to be created.
+(The density of the volume label must match the CMS FILEDEF command DEN
+parameter value.)
+<P>You should specify LABELDEF commands for your tape files so that processes
+that use tapes (such as RESTORE) can verify that the correct tape is
+mounted. This is particularly advisable when working with multivolume
+tape files. 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">If you are processing multivolume tape files, you should use a different
+VOLID for each tape volume so that the system can verify that the correct tape
+is mounted. To do this, enter VOLID ? with the LABELDEF command.
+CMS prompts you for the individual VOLIDs. For more information on the
+LABELDEF command, see the <CITE>VM/ESA: CMS Command Reference</CITE> manual for your VM system.
+</TD></TR></TABLE>
+<P><H4><A NAME="Header_183">Single-Volume Tape Files</A></H4>
+<A NAME="IDX4494"></A>
+<A NAME="IDX4495"></A>
+<A NAME="IDX4496"></A>
+<P>For single-volume tape files, you can use the following CMS FILEDEF command
+tape label options: 
+<UL>
+<LI>SL if the tape has standard labels
+</LI><LI>NL if the tape is unlabeled
+</LI><LI>BLP if the tape has standard labels, standard user labels, or nonstandard
+labels with a tape mark at the end of the labels
+</LI><LI>LABOFF if the tape is unlabeled (and has no leading tape mark).
+</LI></UL>
+<P>The database manager does not support nonstandard labels or standard user
+labels (except with the FILEDEF BLP parameter as described in the preceding
+list). Therefore, you must not specify tape label options SUL or NSL in
+the CMS FILEDEF command.
+<P><H4><A NAME="Header_184">Multiple Volume Tape Files</A></H4>
+<A NAME="IDX4497"></A>
+<A NAME="IDX4498"></A>
+<A NAME="IDX4499"></A>
+<A NAME="IDX4500"></A>
+<A NAME="IDX4501"></A>
+<A NAME="IDX4502"></A>
+<A NAME="IDX4503"></A>
+<A NAME="IDX4504"></A>
+<A NAME="IDX4505"></A>
+<A NAME="IDX4506"></A>
+<P>In addition to the FILEDEF command, you should specify a LABELDEF command
+for multivolume standard label tapes. This enables CMS to verify that
+the correct tape is mounted when a multivolume tape file is being
+processed.
+<P>If you have two tape drives available, you can specify an alternate tape
+drive in the FILEDEF command (this is only supported with labelled
+tapes). This causes tape drives to be switched automatically when
+end-of-tape is reached. If you are using a single tape drive you must
+mount a new tape when end-of-tape is reached.
+<P>The following is an example of FILEDEF and LABELDEF commands for a database
+archive:
+<P><BR>
+<TABLE BORDER ><TR><TD><BR>
+<PRE>TAPE WVOL1 ARCD1 (TAP1
+TAPE WVOL2 ARCD2 (TAP2
+LABELDEF ARIARCH VOLID ?
+DMSLBD441R Enter VOLID information:
+ARCD1
+DMSLBD441R Enter VOLID information:
+ARCD2
+DMSLBD441R Enter VOLID information:
+ 
+FILEDEF ARIARCH TAP1 SL 1 (ALT TAP2
+</PRE>
+</TD></TR></TABLE>
+<P>This LABELDEF statement assumes that the archive requires two tape
+drives. If it requires more, you are prompted to enter more VOLIDs
+during the archive procedure.
+<P><H4><A NAME="Header_185">Spanned Records</A></H4>
+<A NAME="IDX4507"></A>
+<A NAME="IDX4508"></A>
+<P>For spanned-record files, omit the LRECL value from the CMS FILEDEF
+command. If specified, it is ignored.
+<P>There are no other special considerations for spanned-record input
+files.
+<P>For spanned-record output files: 
+<UL>
+<LI>If RECFM=VBS is specified and the maximum logical record size is less than
+the block size minus 4, the database manager changes the RECFM value to VB (in
+the CMS file system). 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">Files written in RECFM=VB format can be read with the RECFM specification of
+either VBS or VB.
+</TD></TR></TABLE>
+</LI><LI>If RECFM is not VBS, the database manager uses (in the CMS file system)
+RECFM U and simulates RECFM=VS. (The file is written in RECFM=VS
+format.) 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">Files written in RECFM=VS format can be read with the RECFM specification of
+either VS or VBS.
+</TD></TR></TABLE>
+</LI></UL>
+<P><H4><A NAME="Header_186">Blocking for Archives to Tape and Disk</A></H4>
+<A NAME="IDX4509"></A>
+<A NAME="IDX4510"></A>
+<P>The block size for database archive file output and log archive file output
+is always 28 kilobytes.
+<P><H3><A NAME="Header_187" HREF="arip2mst02.HTM#ToC_187">General File Support</A></H3>
+<A NAME="IDX4511"></A>
+<A NAME="IDX4512"></A>
+<A NAME="IDX4513"></A>
+<A NAME="IDX4514"></A>
+<A NAME="IDX4515"></A>
+<P>Many of the database manager facilities use SYSIN, SYSPRINT, and SYSPUNCH
+files. The IBM-supplied EXECs that call these facilities often contain
+parameters that allow you to assign these files to various devices.
+These EXEC parameters generate CMS FILEDEF commands for the files
+internally.
+<P>In many instances, however, the EXECs provide for only the most common
+files. If you want something that is not an option in an EXEC
+parameter, you can issue a FILEDEF command before running the EXEC. For
+example, to assign SYSIN to tape for the DBS utility, you must issue a CMS
+FILEDEF command before running the DBS utility EXEC (SQLDBSU).
+<P>Many of the usual VM assignments for SYSIN, SYSPRINT, and SYSPUNCH are
+valid for DB2 Server for VM use. The following list summarizes the
+valid assignments: 
+<DL>
+<P><DT><B>SYSIN
+<A NAME="IDX4516"></A>
+</B><DD>The SYSIN files can be CMS files, virtual reader files, the virtual
+machine terminal, or tape and DASD SAM files supported by CMS OS QSAM.
+The files must contain fixed-length 80-byte logical records. Except for
+the virtual reader files and for terminal input, the files can be fixed
+block. A CMS FILEDEF command for SYSIN can specify RECFM FB and BLKSIZE
+<VAR>nnnn</VAR>. The <VAR>nnnn</VAR> must be some multiple of 80.
+<P><DT><B>SYSPRINT
+<A NAME="IDX4517"></A>
+</B><DD>The SYSPRINT files can be CMS files, virtual printer files, the virtual
+machine terminal, or tape SAM files supported by CMS OS QSAM. All
+SYSPRINT records are fixed-length, 121-byte logical records. The 1st
+byte is an ANSI (ASA) carriage control character. 
+<P>Except for the virtual printer files and terminal output, the files can be
+fixed blocked. A CMS FILEDEF command for a SYSPRINT file can specify
+RECFM FBA (or FB) and BLKSIZE <VAR>nnnn</VAR>. The <VAR>nnnn</VAR> must be
+some multiple of 121. If you specify RECFM in the SYSPRINT FILEDEF, you
+must specify FA or FBA (unless you want the ANSI carriage control characters
+printed). The value FA is the default. 
+<P>The DBS utility and ISQL support other print file logical record
+sizes. In addition, ISQL supports other devices. For more
+specific information, refer to the <CITE>DB2 Server for VSE
+&amp; VM Database Services Utility</CITE> and the <CITE>DB2 Server for VSE &amp; VM Interactive SQL
+Guide and Reference</CITE> manuals.
+<P><DT><B>SYSPUNCH
+<A NAME="IDX4518"></A>
+</B><DD>The SYSPUNCH files (used only by the DB2 Server for VM preprocessors) can
+be CMS files, virtual punch files, or tape sequential files supported by CMS
+OS QSAM. The database manager punches fixed-length, 80-byte logical
+records. Except for virtual punch files, they can be fixed
+blocked. The CMS FILEDEF command for a SYSPUNCH file can specify RECFM
+FB and BLKSIZE <VAR>nnnn</VAR>. The <VAR>nnnn</VAR> must be some multiple
+of 80.
+</DL>
+<P>Remember that normal CMS defaults on FILEDEF commands apply.
+Specifically, if the file is a CMS file, and you do not specify a file mode,
+CMS uses A1. If you specify only a file mode letter, CMS uses a file
+mode number of 1. If you specify * for the file mode, CMS searches all
+accessed minidisks (A to Z) for a file with the specified file name and file
+type.
+<P><H3><A NAME="HDRSTRTMUL" HREF="arip2mst02.HTM#ToC_188">Starting the Application Server in Multiple User Mode</A></H3>
+<A NAME="IDX4519"></A>
+<P>You start the application server in multiple user mode so that one or more
+applications can concurrently access the same application server.
+<P>To start the application server in multiple user mode: 
+<OL COMPACT TYPE=1>
+<LI>Log on to a database machine
+</LI><LI>IPL CMS
+</LI><LI>Issue the SQLSTART EXEC.
+</LI></OL>
+<P>
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">You cannot run the database manager in a CMS batch machine.
+</TD></TR></TABLE> 
+<A NAME="IDX4520"></A>
+<P><A HREF="#FIGSQLSTRT">Figure 12</A> shows the format of the SQLSTART EXEC.
+<P><B><A NAME="FIGSQLSTRT">Figure 12. SQLSTART EXEC</A></B><BR>
+<TABLE BORDER  WIDTH="100%"><TR><TD><BR>
+<PRE>>>-SQLSTART----Dbname(<i>server&#95;name</i>)---+------------+------------->
+                                     '-dcssID(<i>id</i>)-'
+ 
+>-----+-----------+---+------------------+--------------------->&lt;
+      '-AMODE(<i>nn</i>)-'   '-PARM(<i>parameters</i>)-'
+ 
+</PRE>
+</TD></TR></TABLE>
+<P>The parameters for the SQLSTART EXEC are: 
+<DL>
+<P><DT>Dbname(<VAR>server_name</VAR>) 
+<A NAME="IDX4521"></A>
+<P>
+<A NAME="IDX4522"></A>
+<DD>This parameter must be specified and must precede the PARM
+parameter. The <VAR>server_name</VAR> variable identifies the
+application server. 
+<P>After initial installation and database generation, the only application
+server you have is named SQLDBA. If you add more databases, you can
+specify other names for DBNAME.
+<P><DT>dcssID(<VAR>id</VAR>) 
+<A NAME="IDX4523"></A>
+<P>
+<A NAME="IDX4524"></A>
+<DD>Specify this optional parameter only if you have created saved segments
+for the DB2 Server for VM code and want to use those saved segments, and you
+have generated a bootstrap package other than SQLDBA. If DCSSID is not
+specified, the <VAR>id</VAR> value from the <VAR>resid</VAR> SQLDBN file on the
+production disk is used. If DCSSID is specified, but is different from
+the value in the <VAR>resid</VAR> SQLDBN file, the new value is saved. If
+no value is available, SQLDBA is used. 
+<P>If specified, DCSSID must precede the PARM parameter. You can
+specify ID instead of DCSSID for the keyword. No other abbreviation is
+valid. For more information on starting the application server to use
+saved segments, refer to <A HREF="arip2mst68.HTM#HDRSTDCSS">Chapter 8,  Saved Segments</A>. 
+<A NAME="IDX4525"></A>
+<P><DT>AMODE(<VAR>nn</VAR>) 
+<A NAME="IDX4526"></A>
+<P>
+<A NAME="IDX4527"></A>
+<P>
+<A NAME="IDX4528"></A>
+<A NAME="IDX4529"></A>
+<DD>This optional parameter specifies the type of addressing the database
+manager runs in. It has two options: 
+<DL>
+<P><DT>AMODE(31)
+<DD>When this option is specified, the database manager uses 31-bit addressing
+and storage above 16M can be used. This is the recommended addressing mode.
+<P><DT>AMODE(24)
+<DD>When this option is specified, the database manager uses 24-bit
+addressing. In this case, storage above 16M cannot be used and must <B>NOT</B> be defined (ie: the virtual machine
+size must not exceed 16 megabytes), unless the RDS component is executed from
+a saved segment defined below 16 megabytes, <B>OR</B> the RDS component is
+linkeditted with "AMODE ANY RMODE 24".
+</DL>
+<P>
+<P>The value specified for the AMODE parameter is saved in the <VAR>resid</VAR>
+SQLDBN file. If AMODE is not specified in the SQLSTART EXEC, the
+<VAR>resid</VAR> SQLDBN file is checked, and the AMODE value found in the
+<VAR>resid</VAR> SQLDBN file is used. If this file does not exist or does
+not contain an AMODE value, AMODE(31) is used and this value is saved in the
+<VAR>resid</VAR> SQLDBN file. The database manager continues to use this
+value until a different value is specified. 
+<P>When AMODE is specified in the SQLSTART EXEC, this parameter must precede
+the PARM parameter. No abbreviation of AMODE is valid. 
+<P>Single user mode applications and user exits will be invoked in the same
+addressing mode as the database manager. If you have such applications
+that do not support 31-bit addressing, you must do one of the following:
+<UL COMPACT>
+<LI>Convert your application programs so you can exploit 31-bit addressing
+</LI><LI>Use the AMODE(24) option of the SQLSTART EXEC.
+</LI></UL> 
+<P>For more information on converting your program, see the <CITE>VM/ESA:
+CMS Application Migration Guide.</CITE> For more information on single user mode, see <A HREF="#HDRINVSPM">Starting the Application Server in Single User Mode</A>. For more information on user exits, see <A HREF="arip2mst106.HTM#HDRCUSTOM">Chapter 14,  Creating Installation Exits</A>. 
+<P>Note that the preprocessors and the DBS utility must run in 24-bit
+addressing mode. In single user mode, if the database manager is
+running AMODE(31), the AMODE is automatically switched to AMODE(24) before
+invoking the preprocessor or DBS utility. The AMODE is then switched
+back to AMODE(31) after control is returned to the database manager. 
+<P>The resource adapter always runs AMODE(31) in XA mode or XC mode regardless
+of the mode the database manager is running in.
+<P><DT>PARM(<VAR>parameters</VAR>) 
+<A NAME="IDX4530"></A>
+<DD>This optional parameter is used to specify initialization parameters and
+user application program parameters. If specified, it must be placed
+last, after DBNAME, DCSSID, or AMODE. When specifying initialization
+parameters, separate them with a comma or a blank. 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP"><B>For users moving from the database manager on VSE to the database
+manager on VM</B>. The same parameters that are supported on VSE are
+supported on VM. The exceptions are the DSPLYDEV and DBPSWD
+parameters. 
+<P>The database manager on VM ignores the DSPLYDEV parameter. Instead,
+SQLSTART always issues SP CON START HOLD (unless the database manager is
+already spooled START), and all output (except dumps) goes to the
+console. Dumps go to the virtual printer or reader. This implementation is different because, on the VSE
+operating system, there is only one operator console and one SYSLST for each
+partition. In VM, all machines usually have their own console and
+virtual printer. 
+<P>The DBPSWD parameter was used in VSE to specify a VSAM password.
+This parameter does not apply to the database manager on VM, and is ignored if
+specified.
+</TD></TR></TABLE>
+</DL>
+<P>During its processing, SQLSTART issues these CMS FILEDEF commands for the
+trace and archive files: 
+<A NAME="IDX4531"></A>
+<P>
+<A NAME="IDX4532"></A>
+<P>
+<A NAME="IDX4533"></A>
+<P>
+<A NAME="IDX4534"></A>
+<P>
+<A NAME="IDX4535"></A>
+<P>
+<PRE>   FILEDEF ARIARCH TAP1 SL (NOCHANGE PERM
+   FILEDEF ARITRAC TAP2 SL (NOCHANGE PERM
+   FILEDEF ARILARC TAP3 SL (NOCHANGE PERM
+</PRE>
+<P>To override these FILEDEF commands, issue your own before running
+SQLSTART. You must use the ddnames ARITRAC, ARIARCH, and ARILARC for
+the trace, database archive, and log archive files, respectively.
+Standard label, unlabeled, single volume, and multivolume tapes are
+supported. For more information on tape support, see <A HREF="#HDRSQLTAPE">Tape Support</A>.
+<P>If you are using standard label tape files for tracing, database archiving,
+or log archiving, you can optionally submit CMS LABELDEF commands before
+running the SQLSTART EXEC. This allows you to specify values to be used
+for file header label checking and creation. You should supply CMS
+LABELDEF commands to ensure that you have the proper tape files and volumes
+mounted. You must use the LABELDEF command for multivolume standard
+label tapes. For more information, see the <CITE>VM/ESA: CMS
+Command Reference</CITE> manual.
+<P>Do not specify any VOLID parameter on your LABELDEF (or FILEDEF) commands
+for log archiving (ddname ARILARC). Because more than one log archive
+file can be read or created during one database-manager session, you should
+use different VOLIDs for the different files.
+<P>You can take log archives to disk rather than tape by changing the FILEDEF
+of ARILARC. For more information on directing log archives to disk, see
+<A HREF="arip2mst73.HTM#HDRARCHL">Log Archiving to Disk</A>.
+<P>It is possible to direct the trace output to a memory buffer or to a CMS
+file rather than to a tape. This may be convenient if you often use the
+security audit trace. For more about directing trace output to a memory
+buffer or to a CMS file, see the <CITE>DB2 Server for VSE &amp;
+VM Operation</CITE> manual.
+<P><H4><A NAME="Header_189">Running Multiple User Mode Application Programs</A></H4>
+<A NAME="IDX4536"></A>
+<A NAME="IDX4537"></A>
+<A NAME="IDX4538"></A>
+<P>When the application server is started in multiple user mode, and the user
+machine is initialized (with the SQLINIT EXEC), SQL application programs can
+be started by normal means (such as the CMS LOAD or START commands).
+<P>For more information on running application programs, see the <CITE>DB2 Server for VSE &amp; VM Application Programming</CITE> manual. 
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">If you plan to run your application programs in both multiple user mode and
+single user mode, you should follow the protocols discussed in the section <A HREF="#HDRCRPS">CALL/RETURN Protocols for Application Programs in Single User Mode</A>.
+</TD></TR></TABLE>
+<P><H3><A NAME="HDRINVSPM" HREF="arip2mst02.HTM#ToC_190">Starting the Application Server in Single User Mode</A></H3>
+<A NAME="IDX4539"></A>
+<A NAME="IDX4540"></A>
+<A NAME="IDX4541"></A>
+<A NAME="IDX4542"></A>
+<P>An application program running in single user mode runs in the same machine
+as the application server, and is under its control. (In this
+situation, the user machine and the database machine are actually the same
+machine.) To run a single user mode application program, start the
+application server in single user mode (SYSMODE=S) and provide the program
+name as an initialization parameter (PROGNAME=<VAR>name</VAR>). For
+PROGNAME specify the name you would specify if running the program in multiple
+user mode. The program is loaded and control is passed to it after the
+application server is started. For single user mode, only the TEXT
+files need to be available. If you choose this method, you should put
+the files in a TXTLIB, because the database manager does not issue INCLUDE
+commands. It is preferable to create a module using the CMS LOAD/GENMOD
+commands, especially if the program is to be used frequently. 
+<A NAME="IDX4543"></A>
+<P>
+<A NAME="IDX4544"></A>
+<P>Your application is invoked in the same addressing mode as the database
+machine. If your single user mode application program does not support
+31-bit addressing, you must do one of the following: 
+<UL COMPACT>
+<LI>Convert your application programs so you can exploit 31-bit addressing,
+</LI><LI>Use the AMODE(24) option of the SQLSTART EXEC. See the RDS
+restriction when using AMODE(24), <A HREF="#HDRSTRTMUL">Starting the Application Server in Multiple User Mode</A>.
+</LI></UL>
+<P>For more information on converting your program, see the <CITE>VM/ESA:
+CMS Application Migration Guide</CITE>.
+<P>
+<P>
+<B>Attention:</B> The value specified for the AMODE parameter is
+saved in the <VAR>resid</VAR> SQLDBN file between invocations of the SQLSTART
+EXEC. If AMODE is not specified, the <VAR>resid</VAR> SQLDBN file is
+checked, and the last value is used. If you only want AMODE(24) for
+single user mode applications, be sure to specify AMODE(31) when restarting in
+multiple user mode. When running AMODE(24) option, you cannot use any
+storage above 16M.
+<P>Some administrative tasks (such as adding dbextents and adding dbspaces)
+are performed by running IBM-supplied EXECs in single user mode. These
+EXECs call the SQLSTART command with the appropriate parameters.
+<P><A HREF="#FIGXSINGLE">Figure 13</A> shows how to run an application program in single user
+mode. When the application server is started, it passes control to the
+application program specified by the PROGNAME parameter. All other
+initialization parameters are allowed to default. You may want to
+specify some single user mode initialization parameters. For
+information on single user mode initialization parameters, see <A HREF="#FIGXINITT2">Figure 11</A>. 
+<P><B><A NAME="FIGXSINGLE">Figure 13. Starting in Single User Mode</A></B><BR>
+<TABLE BORDER ><TR><TD><BR>
+<PRE>SQLSTART DB(SQLDBA) PARM(SYSMODE=S,PROGNAME=<VAR>name</VAR>)
+</PRE>
+</TD></TR></TABLE>
+<P>
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">The PROGNAME parameter is not needed when STARTUP=C|E|L|S|I|M is
+specified. These startups specify the operation to be performed, so a
+program name is not needed. Moreover, the database manager provides
+separate EXECs for each of these situations, one of which must be used instead
+of SQLSTART. (Each of these EXECs calls SQLSTART at the proper
+time.)
+</TD></TR></TABLE>
+<A NAME="IDX4545"></A>
+<P>During its processing, SQLSTART issues these CMS FILEDEF commands for the
+trace, database archive, and log archive files: 
+<A NAME="IDX4546"></A>
+<P>
+<PRE>   FILEDEF ARIARCH TAP1 SL (NOCHANGE PERM
+   FILEDEF ARITRAC TAP2 SL (NOCHANGE PERM
+   FILEDEF ARILARC TAP3 SL (NOCHANGE PERM
+</PRE>
+<P>To override these FILEDEF commands, issue your own before running
+SQLSTART. You must use the ddnames ARITRAC, ARIARCH, and ARILARC for
+the trace, database archives, and log archives, respectively. Specify
+the PERM option on your FILEDEF commands if the application program is written
+in a language other than Assembler. Standard label, unlabeled, single
+volume, and multivolume tapes are supported. For more information on
+tape support, see <A HREF="#HDRSQLTAPE">Tape Support</A>.
+<P>If you are using standard label tape files for tracing, database archiving,
+or log archiving, you can optionally submit CMS LABELDEF commands before
+running the SQLSTART EXEC. This allows you to specify values to be used
+for file header label checking and creation. You should supply CMS
+LABELDEF commands to ensure that you have the proper tape files and volumes
+mounted. You must use the LABELDEF command for multivolume standard
+label tapes. For more information, see the <CITE>VM/ESA: CMS
+Command Reference</CITE> manual.
+<P>You should not specify VOLID parameters on any LABELDEF or FILEDEF commands
+you issue for the log archive files. Because more than one tape file
+can be created during a database manager run, you should use different VOLIDs
+for the different tape files.
+<P>It is possible to direct the trace output to a CMS file rather than to a
+tape. This may be convenient if you often use the security audit
+trace. For more information about tracing, see the <CITE>DB2 Server for VSE &amp; VM Operation</CITE> manual.
+<P>In addition to the FILEDEFs for archiving and tracing, SQLSTART issues the
+following FILEDEF command for a user LOADLIB: 
+<PRE>   FILEDEF ARIUSRDD DISK USERLIB LOADLIB * (NOCHANGE
+</PRE>
+<P>
+<A NAME="IDX4547"></A>
+<P>
+<A NAME="IDX4548"></A>
+<P>If you want to specify a different LOADLIB, issue your own FILEDEF command
+before calling SQLSTART. You must use the ddname ARIUSRDD on the
+FILEDEF command to identify a user LOADLIB to the database manager.
+Note that the file mode used in the FILEDEF is *. Remember to access
+the minidisk containing your LOADLIB ahead of other minidisks that contain
+USERLIB LOADLIBs. 
+<A NAME="IDX4549"></A>
+<P>If you use AMODE(24), the application program must be RMODE 24. If
+it is not, and the program is loaded above 16M, the database manager issues
+message ARI0021E.
+<P>The application program can be a module, or it can reside in a LOADLIB (or,
+conceivably, a saved segment). 
+<A NAME="IDX4550"></A>
+<P>
+<A NAME="IDX4551"></A>
+ Because the database manager does not know where the user program is (and
+there are many ways to load a program in VM), the database manager tries a
+sequence of VM commands to load the program. The following sequence is
+used: 
+<OL TYPE=1>
+<LI>CMS LOADMOD command: for CMS files with a file type MODULE. 
+<A NAME="IDX4552"></A>
+ The program is loaded into the CMS user program area.
+</LI><LI>CMS NUCXLOAD command: for members of CMS or OS LOADLIBs. 
+<A NAME="IDX4553"></A>
+ The program is loaded into free storage.
+</LI><LI>CP diagnose FINDSYS/LOADSYS instructions: for saved segments.
+<P>
+<A NAME="IDX4554"></A>
+<P>
+<A NAME="IDX4555"></A>
+</LI><LI>CMS LOAD command: for TEXT files or TXTLIB members. 
+<A NAME="IDX4556"></A>
+ The program is loaded into the CMS user program area. Note that CMS
+INCLUDE commands are not issued in this situation. Also, a GLOBAL
+TXTLIB command must be issued before SQLSTART if the text files are TXTLIB
+members. More than one library can be specified on the GLOBAL
+command.
+</LI></OL>
+<P>
+<A NAME="IDX4557"></A>
+<P>
+<A NAME="IDX4558"></A>
+ Because not all of the above VM load functions return the entry point, you
+should code your program so the entry point is the same as the load
+point. Only LOADMOD and NUCXLOAD return the program's entry
+point. When the database manager finds a program with the name
+specified in the PROGNAME initialization parameter and successfully loads the
+program, the search sequence ends. Control is passed to the program
+with a BALR instruction. 
+<A NAME="IDX4559"></A>
+<P>For example, suppose you have two programs on your A-disk. One is
+named MYPROG MODULE A; the other is named MYPROG TEXT A. If you
+run SQLSTART with PROGNAME=MYPROG, the program loaded is MYPROG MODULE
+A. The database manager tries the LOADMOD command before the LOAD
+command. If you want to load MYPROG TEXT A, you must either rename it
+and change the PROGNAME parameter value accordingly, or you must rename (or
+erase) MYPROG MODULE A.
+<P>If the database manager does the entire search sequence, and a <I>not
+found</I> indication is received from each of the load functions, four
+messages are issued: 
+<DL COMPACT>
+<DT><B>ARI0026E
+</B><DD>Indicates an error occurred while attempting to load the program.
+<DT><B>ARI0039E
+</B><DD>Indicates a limit error occurred.
+<DT><B>ARI0042I
+</B><DD>Indicates the reason code is 4.
+<DT><B>ARI0043I
+</B><DD>Indicates the return code is 512.
+</DL>
+<P>If the database manager receives an insufficient storage indication from
+any of the load functions, the same four messages are issued, but the reason
+code in message ARI0042I is 8 (not 4).
+<P>If the load of the user program fails for a reason other than those
+discussed above, the database manager issues message ARI0026E.
+Following that message is one or more occurrences of message ARI0047E.
+Message ARI0047E has the format: 
+<PRE>  <VAR>xxxxxxxx</VAR>- Reason Code=<VAR>nnn</VAR>
+</PRE>
+<P>The type of load is indicated in <VAR>xxxxxxxx</VAR>. The
+<VAR>xxxxxxxx</VAR> can be LOADMOD, NUCXLOAD, SEGMENT LOAD, FETCH, or
+LOAD. The system return code from that load is in <VAR>nnn</VAR>.
+This message is followed by either message ARI0039E or ARI0040E, depending on
+the type of error. Following that message is ARI0042I with a reason
+code of <TT>0</TT> (the reason code is given earlier in message ARI0047E),
+and finally by message ARI0043I with a return code of 516.
+<P>Note that, for a NUCXLOAD or SEGMENT LOAD, the database manager must do
+more than issue those commands. 
+<A NAME="IDX4560"></A>
+<P>
+<A NAME="IDX4561"></A>
+<P>
+<A NAME="IDX4562"></A>
+<P>For NUCXLOAD, the sequence of NUCEXT QUERY, NUCXDROP, NUCXLOAD, and NUCEXT
+QUERY may be processed to load the code. Thus, the reason code
+displayed in message ARI0047E can be a return code from NUCEXT QUERY or
+NUCXDROP. (The return code is not necessarily from a NUCXLOAD.)
+You should check the <CITE>DB2 Server for VM Messages and
+Codes</CITE> manual for return codes from NUCEXT QUERY and NUCXDROP as well as
+NUCXLOAD.
+<P>The database manager follows this process when attempting to load a program
+with NUCXLOAD: 
+<OL TYPE=1>
+<LI>Issues NUCEXT QUERY to see if a copy of the code already exists in storage
+(storage is not properly reset). If so, the CMS NUCXDROP command is
+issued. If the NUCXDROP return code is not zero, the return code is
+displayed as the ARI0047E reason code.
+</LI><LI>If the NUCEXT QUERY is successful (and NUCXDROP, if performed), the
+NUCXLOAD is issued. If the load fails, the nonzero return code becomes
+the reason code in message ARI0047E.
+</LI><LI>If the load is successful, another NUCEXT QUERY is issued to obtain the
+code load address and the code length. If this fails, a reason code of
+253 is displayed in message ARI0047E.
+</LI></OL>
+<P>A similar process is done for code that is to be loaded into a saved
+segment. 
+<A NAME="IDX4563"></A>
+<P>
+<A NAME="IDX4564"></A>
+ The database manager does a SEGMENT FIND instruction to get the code load
+address and length. The SEGMENT LOAD instruction is then issued.
+Thus, the reason code displayed in message ARI0047E can be a return code from
+the SEGMENT FIND (not necessarily the SEGMENT LOAD) instruction. You
+should check the <CITE>DB2 Server for VM Messages and Codes</CITE> manual for return codes from SEGMENT FIND as well as SEGMENT LOAD.
+<P>The database manager follows this procedure when attempting to load a
+program with the SEGMENT LOAD macro: 
+<OL TYPE=1>
+<LI>Issues a SEGMENT FIND instruction to get the load address and length of
+the code to be loaded.
+</LI><LI>If the SEGMENT FIND condition code is 2, an error occurred. The
+return code XXX is displayed as the reason code in message ARI0047E: 
+<PRE>   ARI0047E  SEGMENT LOAD  - Reason Code=<VAR>XXX</VAR>
+</PRE>
+</LI><LI>If the condition code is 1 (saved segment not yet loaded), the database
+manager does some checking before attempting to load the code: If it is
+not, the reason code 400 is displayed in message ARI0047E. 
+<OL TYPE=a>
+<LI>If the above check was successful, the database manager then checks to
+ensure that loading the code at the indicated load address does not overlay
+other database manager code. If an overlay would result, the database
+manager displays a reason code of 500 in message ARI0047E.
+</LI><LI>If both checks are successful, the SEGMENT LOAD instruction is
+issued. The code is loaded at the address returned by the SEGMENT FIND
+instruction.
+</LI></OL>
+</LI><LI>If the SEGMENT LOAD is issued and the condition code is 2, an error
+occurred. The SEGMENT LOAD return code is displayed as the reason code
+in message ARI0047E.
+</LI><LI>If the SEGMENT LOAD is issued and the condition code is 1, a code overlay
+occurred. A reason code of 500 is displayed in message ARI0047E.
+</LI></OL>
+<P>In addition to the loading sequence, you should be aware of the following
+when preparing to run a single user mode program: 
+<UL>
+<LI>If the program resides in an OS LOADLIB, you must ensure that the
+proper GLOBAL and FILEDEF commands are issued before starting the application
+server.
+</LI><LI>The database manager uses CMS OS QSAM for sequential file support.
+The CMS OS QSAM support uses the GETMAIN area of the virtual machine.
+The CMS OS QSAM support is called before the user's application
+program. You should not issue the CMS STRINIT macro in the application
+program, as this may release all GETMAIN storage currently allocated by the
+database manager. This can only occur if the setting of the CMS
+STORECLR option is 'ENDCMD'. When the STORECLR option is set
+to 'ENDSVC' (the CMS default), the STRINIT macro is
+ignored.
+</LI><LI>If the application does not support 31-bit addressing, you must use
+AMODE(24).
+</LI><LI>When running AMODE(24), single user mode applications (and user exits)
+should not switch to AMODE(31) and branch to other applications above 16M
+unless: those applications have no interaction or interface with DB2
+Server for VM code, and, AMODE(24) is reset before returning control to the
+database manager.
+</LI></UL>
+<P><H4><A NAME="HDRXSUPS">Specifying User Parameters</A></H4>
+<A NAME="IDX4565"></A>
+<A NAME="IDX4566"></A>
+<P>If you start the application server in single user mode, you can also
+specify user parameters to be passed to the application program using the PARM
+keyword of the SQLSTART EXEC. The SQLSTART EXEC purges the CMS program
+and console stacks. Thus, any program run in single user mode cannot
+rely on console or program stack input.
+<P>Place a slash (/) between the database manager initialization parameters
+and the user parameters, as shown in <A HREF="#FIGXAPPARMS">Figure 14</A>.
+<P><B><A NAME="FIGXAPPARMS">Figure 14. Starting in Single User Mode and Providing User Parameters</A></B><BR>
+<TABLE BORDER ><TR><TD><BR>
+<PRE>SQLSTART DB(SQLDBA) PARM(SYSMODE=S,PROGNAME=PROG1/<VAR>parm1,parm2</VAR>)
+</PRE>
+</TD></TR></TABLE>
+<A NAME="IDX4567"></A>
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">Only the first 130 characters of the command line are read by CMS. The
+exception to this rule occurs when SQLSTART is called from a user-written
+EXEC; then CMS reads the first 256 characters. If you specify many
+initialization parameters and user parameters, they will not fit on the
+command line. Thus, you must use a CMS file for some of the
+parameters. Because user parameters cannot be specified in a CMS file,
+you should specify the initialization parameters in the CMS file, and the user
+parameters on the command line.
+</TD></TR></TABLE>
+<P>The user parameters are passed to the application program with register
+<TT>0</TT>. Register <TT>0</TT> points to an area called NPLIST,
+which contains three addresses, which point to: 
+<OL TYPE=1>
+<LI>COMVERB, the command name, the name of the application program specified
+in the PROGNAME initialization parameter.
+</LI><LI>BEGARGS, the start of the user parameter string.
+</LI><LI>ENDARGS, the byte following the last character of the user
+parameters.
+</LI></OL>
+<P>The user parameter string is untokenized: it has not been separated
+into individual user parameters. This pointer scheme is similar to the
+one that the EXEC 2 interpreter uses when running programs. <A HREF="#FIGXPARMPAS">Figure 15</A> shows how register <TT>0</TT> points to the user
+parameters.
+<P><B><A NAME="FIGXPARMPAS">Figure 15. Passing User Parameters to a User Application Program</A></B><BR>
+<B><BR><IMG SRC="ARIP2PA1.GIF" ALT="REQTEXT"><BR></B><BR>
+<P>The length of the parameters can be obtained by subtracting the BEGARGS
+address from the ENDARGS address. If there are no user parameters, the
+ENDARGS address is equal to the BEGARGS address (ENDARGS - BEGARGS =
+<TT>0</TT>.) Both addresses, in this situation, point to the next
+byte after the name of the application.
+<P>User parameters are not displayed along with the initialization
+parameters. User parameters cannot be specified in a DB2 Server for VM
+parameter data set.
+<P><H4><A NAME="HDRCRPS">CALL/RETURN Protocols for Application Programs in Single User Mode</A></H4>
+<A NAME="IDX4568"></A>
+<A NAME="IDX4569"></A>
+<P>In single user mode, an application is called using normal CALL/RETURN
+protocols, as follows: 
+<DL COMPACT>
+<DT><B>Register 0
+</B><DD>Pointer to pointer to user parameters
+<DT><B>Register 1
+</B><DD>Contains zeros
+<DT><B>Register 13
+</B><DD>Pointer to DB2 Server for VM save area
+<DT><B>Register 14
+</B><DD>Return point to the database manager
+<DT><B>Register 15
+</B><DD>Entry point of the user program.
+</DL>
+<P>
+<TABLE><TR><TD ALIGN="LEFT" VALIGN="TOP"><B>Note:</B></TD><TD ALIGN="LEFT" VALIGN="TOP">This same protocol can also be used by programs running in multiple user
+mode.
+</TD></TR></TABLE>
+<P>Register <TT>0</TT> was discussed in the previous section. A
+program written in C, PL/I, COBOL, or FORTRAN requires an interface routine to
+process the user parameters.
+<P>Upon entry, the application program must store the registers in the DB2
+Server for VM save area, and restore them before returning control to the
+database manager. Failure to do so causes unpredictable results.
+<P>An abnormal termination exit is set to intercept abnormal termination
+conditions, including program checks. If the user program establishes
+its own abnormal end exit, the user exit overrides the DB2 Server for VM
+abnormal end exit. 
+<A NAME="IDX4570"></A>
+<P>
+<A NAME="IDX4571"></A>
+<P>
+<A NAME="IDX4572"></A>
+<P>The abnormal end exit is set (with CMS ABNEXIT) to intercept abnormal end
+conditions (including program checks). If the user program establishes
+an abnormal end exit (for example, with ABNEXIT, STAE, SPIE), the user program
+gets control 
+<A NAME="IDX4573"></A>
+<P>
+<A NAME="IDX4574"></A>
+<P>
+<A NAME="IDX4575"></A>
+ before the DB2 Server for VM abnormal end exit does. (However, STAE
+and SPIE are not supported in 31-bit addressing mode.) When the user
+program completes its abnormal end processing, it should return control to the
+CMS abnormal end routine. The CMS abnormal end routine then passes
+control to the DB2 Server for VM 
+<A NAME="IDX4576"></A>
+ abnormal end routine. The application programmer must be careful when
+processing abnormal end conditions. These possibilities must be
+considered: 
+<OL TYPE=1>
+<LI>The abnormal end condition occurs in your program, and you can determine
+that this is the case. You can then circumvent the problem and continue
+processing. In this case, reset the abnormal end exit.
+Otherwise, future abnormal end conditions cause control to be given to the DB2
+Server for VM abnormal end routine. 
+<P>If you determine that processing cannot continue, you should reset your
+abnormal end exit, clear the abnormal end exit, and return control to the CMS
+abnormal end routine. The CMS routine then passes control to the DB2
+Server for VM abnormal end routine.
+</LI><LI>If you cannot determine anything about the abnormal end condition, you
+should reset the abnormal end exit, clear the abnormal end exit, and return
+control to the CMS abnormal end routine. (You would do so when, for
+example, you did not know if your program caused the abnormal end.) The
+CMS abnormal end routine then passes control to the DB2 Server for VM abnormal
+end routine.
+</LI><LI>Finally, consider the situation when no abnormal end condition occurs, and
+your program ends normally (control is returned to the database
+manager). In this situation, your abnormal end exit should be cleared
+prior to returning control to CMS. When both DB2 Server for VM
+processing and user processing finish, both abnormal end exits must be
+cleared. Otherwise, future abnormal end conditions in the virtual
+machine could cause unpredictable results.
+</LI></OL>
+<P>The DB2 Server for VM abnormal end routines sever the IUCV links to the
+database minidisks, and close the trace file if tracing was activated.
+This same processing is also done when, upon completion, the user program
+returns control to the database manager. The database manager does not
+have to do this processing (for example, if the program does not return
+control to the database manager). If the IUCV links to the database
+minidisks are not severed, VM severs the links when you log off the database
+machine. (This also is true if the database machine abnormally
+ends.) If tracing or accounting were active, their output files may not
+have had the last buffers written. If the output files were on tape, no
+tape mark was written. You can then write tape marks with the CMS TAPE
+command.
+<P>The database manager uses eye-catcher technique for determining when a
+specific module is in error. The eye-catcher is displayed in the DB2
+Server for VM mini-dump. A user program can use the same technique in
+single user mode, assuming that the DB2 Server for VM abnormal termination
+exit has not been overridden by a user abnormal end exit. A suggested
+coding example in assembler language is shown in <A HREF="#FIGEYECAT1">Figure 16</A>.
+<P><B><A NAME="FIGEYECAT1">Figure 16. Use of an Eye-catcher by an Application Program</A></B><BR>
+<TABLE BORDER  WIDTH="100%"><TR><TD><BR>
+<PRE>        USING  *,15
+        B      SKIPEYE        BRANCH AROUND EYE-CATCHER
+        DC     AL1(16)        LENGTH OF CHARACTER STRING
+        DC     CL8'<VAR>progname</VAR>'  PROGRAM NAME EYE-CATCHER
+        DC     CL8'<VAR>&amp;SYSDATE</VAR>'  DATE PROGRAM COMPILED
+        DS     0H
+SKIPEYE EQU    *
+        STM    14,12,12(13)   SAVE DB2 Server for VM  REGISTERS
+        BALR   12,0           ESTABLISH BASE REGISTERS
+        DROP   15
+        USING  *,12
+        LA     11,MYSAVEAR    GET ADDRESSABILITY TO MY SAVE AREA
+        ST     11,8(13)       SAVE ADDRESS OF SAVE AREA IN DB2 Server for VM  SAVE AREA
+        ST     13,MYSAVEAR+4  SAVE ADDRESS OF DB2 Server for VM  SAVE AREA IN SAVE AREA
+        LR     13,11          SET REGISTER 13 TO MY SAVE AREA
+            *
+    Body of the Application Program
+            *
+EXIT    L      15,RETCOD      SET RETURN CODE (OR SET TO ZERO)
+        L      13,4(13)       GET DB2 Server for VM  SAVE AREA
+        L      14,12(13)      GET DB2 Server for VM  REGISTER 14
+        LM     0,12,20(13)    GET OTHER DB2 Server for VM  REGISTERS
+        BR     14             RETURN TO DATABASE MANAGER
+</PRE>
+</TD></TR></TABLE>
+<P><B>Notes: </B><OL>
+<P><LI>The instruction BALR 15,0 can be used just ahead of the USING *,15
+instruction as long as other registers are not used until the DB2 Server for
+VM  registers have been saved.
+<P><LI>The techniques shown here work whether the application program is called
+by the database manager, or is called as a CMS command. Thus, the same
+application program can be run in either single or multiple user mode.
+<P><LI>The techniques shown here may not always be achievable by a FORTRAN, C, COBOL, or PL/I program. A program written in one of these
+languages may need to be called by a pre-entry routine, to ensure that
+register 15 contains a zero (or valid return code) upon return to the database
+manager.
+</OL>
+<A NAME="IDX4577"></A>
+<P><H3><A NAME="Header_193" HREF="arip2mst02.HTM#ToC_193">Overriding Initialization Parameters</A></H3>
+<A NAME="IDX4578"></A>
+<A NAME="IDX4579"></A>
+<P>When starting the application server, you can change the default parameter
+values in either of two ways: 
+<UL>
+<LI>By specifying the parameters in the PARM field of the SQLSTART
+EXEC.
+</LI><LI>By creating a CMS file that contains DB2 Server for VM  parameters and
+calling it with the PARMID initialization parameter. See <A HREF="#FIGXPPDS">Figure 9</A> for an example.
+</LI></UL>
+<P>
+<P>You can also combine the two methods. Parameters specified in the
+CMS file override the default values. Parameters specified on the
+SQLSTART EXEC override both the default values and those specified in the CMS
+file. A user who has a CMS file with an incorrect parameter value can
+override the value in error with a correct specification on the SQLSTART
+EXEC.
+<P>When all the values of the initialization parameters have been resolved,
+the final values (or defaults, if no values have been overridden) are
+displayed on the DB2 Server for VM operator's console.
+<P>When you specify parameters on the SQLSTART EXEC, separate each parameter
+with a comma or blank. For example: 
+<PRE>   SQLSTART DBNAME(SQLDBA) PARM(DUMPTYPE=F,LOGMODE=A)
+ 
+   SQLSTART DBNAME(SQLDBA) PARM(DUMPTYPE=F LOGMODE=A)
+</PRE>
+<P>Because CMS reads only the first 130 positions of the CMS command line, you
+may choose to set up your initialization parameters in one or more CMS
+files. Such an arrangement allows you to specify more user parameters
+(if any) when running application programs in single user mode. User
+parameters (those for the application program itself), cannot be specified in
+a CMS file, and must be specified in the PARM field of the SQLSTART
+EXEC. If you plan to use user parameters, refer to <A HREF="#HDRXSUPS">Specifying User Parameters</A>.
+<P>You can also call the SQLSTART EXEC from within a user-written EXEC.
+<P><H3><A NAME="Header_194" HREF="arip2mst02.HTM#ToC_194">Creating a Parameter File</A></H3>
+<P>
+<A NAME="IDX4580"></A>
+<A NAME="IDX4581"></A>
+<A NAME="IDX4582"></A>
+<A NAME="IDX4583"></A>
+<A NAME="IDX4584"></A>
+You can store various parameters in a CMS file that has a file type of
+SQLPARM, and a fixed record length of 80 bytes. To have the database
+manager use the file, specify the file name in the PARMID initialization
+parameter. Each file can start the application server for a slightly
+different environment. <A HREF="#FIGCPARMS">Figure 17</A> shows a parameter file.
+<P><B><A NAME="FIGCPARMS">Figure 17. Example of an Initialization Parameter File</A></B><BR>
+<TABLE BORDER ><TR><TD><BR>
+<PRE>LOGMODE=A,NDIRBUF=20,
+NPAGBUF=20,
+DUMPTYPE=F                     COMMENT -- FULL VIRTUAL MACHINE DUMP
+NCSCANS=20
+</PRE>
+</TD></TR></TABLE>
+<P>
+<A NAME="IDX4585"></A>
+<A NAME="IDX4586"></A>
+<A NAME="IDX4587"></A>
+The rules for specifying parameters in a CMS file are a little different from
+the rules for specifying parameters on the SQLSTART EXEC: 
+<UL>
+<LI>The parameters must be in uppercase in a parameter file.
+</LI><LI>Because a blank after a parameter ends the processing of the line, do not
+put a blank between parameters. Anything on the line after that blank
+is ignored. You can, however, use this arrangement to put comments in
+the file, as shown in <A HREF="#FIGCPARMS">Figure 17</A> for the DUMPTYPE parameter.
+</LI><LI>A comma at the end of a line is not required, but can be used to make the
+statement easier for you to read.
+</LI><LI>User parameters (those destined for the application program itself) cannot
+be specified in a parameter file. If the database manager detects
+parameters other than its own initialization parameters, it issues error
+messages and stops.
+</LI></UL>
+<P>
+<A NAME="IDX4588"></A>
+<P>
+<P><HR><B>[ <A HREF="#Top_Of_Page">Top of Page</A> | <A HREF="arip2mst49.HTM">Previous Page</A> | <A HREF="arip2mst51.HTM">Next Page</A> | <A HREF="arip2mst02.HTM#ToC">Table of Contents</A> | <A HREF="arip2mst178.HTM#HDRINDEX_START">Index</A> ]</B> 
+<A NAME="Bot_Of_Page"></A>
+</BODY></HTML>
